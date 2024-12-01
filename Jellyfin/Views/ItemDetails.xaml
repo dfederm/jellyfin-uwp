@@ -132,8 +132,8 @@
                         Padding="400 0 0 0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="550" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -150,7 +150,8 @@
                                 DisplayMemberPath="Name"
                                 SelectedItem="{x:Bind ViewModel.SelectedSourceContainer, Mode=TwoWay}"
                                 Grid.Row="0"
-                                Grid.Column="1" />
+                                Grid.Column="1"
+                                Width="550" />
                             <TextBlock
                                 Text="Video"
                                 Grid.Row="1"
@@ -160,7 +161,8 @@
                                 DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedVideoStream, Mode=TwoWay}"
                                 Grid.Row="1"
-                                Grid.Column="1" />
+                                Grid.Column="1"
+                                Width="550" />
                             <TextBlock
                                 Text="Audio"
                                 Grid.Row="2"
@@ -170,7 +172,8 @@
                                 DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedAudioStream, Mode=TwoWay}"
                                 Grid.Row="2"
-                                Grid.Column="1" />
+                                Grid.Column="1"
+                                Width="550" />
                             <TextBlock
                                 Text="Subtitles"
                                 Grid.Row="3"
@@ -180,7 +183,8 @@
                                 DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedSubtitleStream, Mode=TwoWay}"
                                 Grid.Row="3"
-                                Grid.Column="1" />
+                                Grid.Column="1"
+                                Width="550" />
                         </Grid>
                         <TextBlock
                             Text="{x:Bind ViewModel.TagLine, Mode=OneWay}"
