@@ -8,7 +8,19 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <MediaPlayerElement
-        x:Name="PlayerElement"
-        AreTransportControlsEnabled="True" />
+    <Canvas>
+        <Image
+            Stretch="Uniform"
+            Visibility="{x:Bind ViewModel.ShowBackdropImage, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Canvas.ZIndex="200">
+            <Image.Source>
+                <BitmapImage UriSource="{x:Bind ViewModel.BackdropImageUri, Mode=OneWay, FallbackValue=null}" />
+            </Image.Source>
+        </Image>
+        <MediaPlayerElement
+            x:Name="PlayerElement"
+            Stretch="Uniform"
+            AreTransportControlsEnabled="True"
+            Canvas.ZIndex="100" />
+    </Canvas>
 </Page>

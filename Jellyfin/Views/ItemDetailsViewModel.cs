@@ -101,7 +101,7 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
         _item = await _jellyfinApiClient.Items[parameters.ItemId].GetAsync();
 
         Name = _item.Name;
-        BackdropImageUri = _jellyfinApiClient.GetImageUri(_item, ImageType.Backdrop, 1920, 400);
+        BackdropImageUri = _jellyfinApiClient.GetItemBackdropImageUrl(_item, 1920);
         LogoImageUri = _jellyfinApiClient.GetImageUri(_item, ImageType.Logo, 300, 175);
         ImageUri = _jellyfinApiClient.GetImageUri(_item, ImageType.Primary, 300, 450);
 
@@ -258,7 +258,7 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
     public void Play()
     {
         _navigationManager.NavigateToVideo(
-            _item.Id.Value,
+            _item,
             SelectedSourceContainer.Id,
             SelectedAudioStream?.Index,
             SelectedSubtitleStream?.Index);
@@ -273,7 +273,7 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
             {
                 // TODO play all the trailers instead of just the first?
                 _navigationManager.NavigateToVideo(
-                    localTrailers[0].Id.Value,
+                    localTrailers[0],
                     mediaSourceId: null,
                     audioStreamIndex: null,
                     subtitleStreamIndex: null);

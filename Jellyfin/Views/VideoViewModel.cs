@@ -26,7 +26,7 @@ public sealed partial class VideoViewModel : ObservableObject
     private readonly JellyfinSdkSettings _sdkClientSettings;
     private readonly DeviceProfileManager _deviceProfileManager;
     private readonly DispatcherTimer _progressTimer;
-    private Guid _videoId;
+    private BaseItemDto _item;
     private MediaPlayerElement _playerElement;
     private PlaybackProgressInfo _playbackProgressInfo;
 
@@ -46,12 +46,19 @@ public sealed partial class VideoViewModel : ObservableObject
         _progressTimer.Tick += (sender, e) => TimerTick();
     }
 
+    public Uri BackdropImageUri { get; set => SetProperty(ref field, value); }
+
+    public bool ShowBackdropImage { get; set => SetProperty(ref field, value); }
+
     public async Task PlayVideoAsync(Video.Parameters parameters, MediaPlayerElement playerElement)
     {
-        _videoId = parameters.VideoId;
+        _item = parameters.Item;
         _playerElement = playerElement;
 
         DeviceProfile deviceProfile = _deviceProfileManager.Profile;
+
+        BackdropImageUri = _jellyfinApiClient.GetItemBackdropImageUrl(_item, 1920);
+        ShowBackdropImage = true;
 
         // Note: This mutates the shared device profile. That's probably OK as long as all accesses do this.
         // TODO: Look into making a copy instead.
@@ -66,14 +73,14 @@ public sealed partial class VideoViewModel : ObservableObject
         };
 
         // TODO: Does this create a play session? If so, update progress properly.
-        PlaybackInfoResponse playbackInfoResponse = await _jellyfinApiClient.Items[_videoId].PlaybackInfo.PostAsync(playbackInfo);
+        PlaybackInfoResponse playbackInfoResponse = await _jellyfinApiClient.Items[_item.Id.Value].PlaybackInfo.PostAsync(playbackInfo);
 
         // TODO: Always the first? What if 0 or > 1?
         MediaSourceInfo mediaSourceInfo = playbackInfoResponse.MediaSources[0];
 
         _playbackProgressInfo = new PlaybackProgressInfo
         {
-            ItemId = _videoId,
+            ItemId = _item.Id.Value,
             MediaSourceId = mediaSourceInfo.Id,
             PlaySessionId = playbackInfoResponse.PlaySessionId,
             AudioStreamIndex = playbackInfo.AudioStreamIndex,
@@ -85,7 +92,7 @@ public sealed partial class VideoViewModel : ObservableObject
 
         if (mediaSourceInfo.SupportsDirectPlay.GetValueOrDefault() || mediaSourceInfo.SupportsDirectStream.GetValueOrDefault())
         {
-            RequestInformation request = _jellyfinApiClient.Videos[_videoId].StreamWithContainer(mediaSourceInfo.Container).ToGetRequestInformation(
+            RequestInformation request = _jellyfinApiClient.Videos[_item.Id.Value].StreamWithContainer(mediaSourceInfo.Container).ToGetRequestInformation(
                 parameters =>
                 {
                     parameters.QueryParameters.Static = true;
@@ -166,6 +173,13 @@ public sealed partial class VideoViewModel : ObservableObject
             {
                 // The calls below throw in this scenario
                 return;
+            }
+
+            if (session.PlaybackState == MediaPlaybackState.Playing && ShowBackdropImage)
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                    CoreDispatcherPriority.Normal,
+                    () => ShowBackdropImage = false);
             }
 
             _playbackProgressInfo.CanSeek = session.CanSeek;

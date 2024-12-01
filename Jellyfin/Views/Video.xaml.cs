@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Jellyfin.Sdk.Generated.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -20,5 +20,5 @@ public sealed partial class Video : Page
 
     protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e) => await ViewModel.StopVideoAsync();
 
-    public record Parameters(Guid VideoId, string MediaSourceId, int? AudioStreamIndex, int? SubtitleStreamIndex);
+    public record Parameters(BaseItemDto Item, string MediaSourceId, int? AudioStreamIndex, int? SubtitleStreamIndex);
 }
