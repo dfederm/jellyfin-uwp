@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Jellyfin.Sdk.Generated.Models;
 using Windows.Devices.Enumeration;
@@ -20,11 +21,25 @@ public sealed class DeviceProfileManager
         CodecQuery codecQuery = new();
 
         HashSet<string> videoCodecGuids = new(StringComparer.OrdinalIgnoreCase);
-        foreach (CodecInfo codecInfo in await codecQuery.FindAllAsync(CodecKind.Video, CodecCategory.Decoder, string.Empty))
+
+        // For some reason querying video codecs without a specific subtype on Xbox results in an Access Violation.
+        // So just query for each specific codec we care about.
+        string[] subtypes = [
+            CodecSubtypes.VideoFormatHevc.ToString(),
+            CodecSubtypes.VideoFormatH264.ToString(),
+            CodecSubtypes.VideoFormatMpeg2.ToString(),
+            CodecSubtypes.VideoFormatWvc1.ToString(),
+            CodecSubtypes.VideoFormatVP80.ToString(),
+            CodecSubtypes.VideoFormatVP90.ToString(),
+        ];
+        foreach (string subtype in subtypes)
         {
-            foreach (string subType in codecInfo.Subtypes)
+            foreach (CodecInfo codecInfo in await codecQuery.FindAllAsync(CodecKind.Video, CodecCategory.Decoder, subtype))
             {
-                videoCodecGuids.Add(subType);
+                foreach (string subType in codecInfo.Subtypes)
+                {
+                    videoCodecGuids.Add(subType);
+                }
             }
         }
 
@@ -1102,7 +1117,9 @@ public sealed class DeviceProfileManager
             */
         }
 
+        Debug.WriteLine("DFED 8");
         Profile = profile;
+        Debug.WriteLine("DFED 9");
     }
 
     private async Task<uint> GetAudioChannelCountAsync()
