@@ -33,8 +33,6 @@ namespace Jellyfin
         {
             this.InitializeComponent();
 
-            App.Current.RequiresPointerMode = Windows.UI.Xaml.ApplicationRequiresPointerMode.WhenRequested;
-
             this.Suspending += OnSuspending;
         }
 
