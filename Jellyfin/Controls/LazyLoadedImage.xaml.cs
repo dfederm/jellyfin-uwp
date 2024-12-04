@@ -1,4 +1,5 @@
-﻿using Jellyfin.Sdk.Generated.Models;
+﻿using System.Diagnostics;
+using Jellyfin.Sdk.Generated.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +18,12 @@ public sealed partial class LazyLoadedImage : UserControl
         {
             ViewModel.Width = (int)e.NewSize.Width;
             ViewModel.Height = (int)e.NewSize.Height;
+        };
+
+        ImageFadeIn.Completed += (object sender, object e) =>
+        {
+            ViewModel.EnableBlurHash = false;
+            ViewModel.BlurHashImageSource = null;
         };
     }
 
@@ -66,4 +73,6 @@ public sealed partial class LazyLoadedImage : UserControl
 
     private static void OnEnableBlurHashChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         => ((LazyLoadedImage)d).ViewModel.EnableBlurHash = (bool)e.NewValue;
+
+    private void ImageOpened(object sender, RoutedEventArgs e) => ImageFadeIn.Begin();
 }

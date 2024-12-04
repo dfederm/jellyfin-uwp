@@ -1117,9 +1117,7 @@ public sealed class DeviceProfileManager
             */
         }
 
-        Debug.WriteLine("DFED 8");
         Profile = profile;
-        Debug.WriteLine("DFED 9");
     }
 
     private async Task<uint> GetAudioChannelCountAsync()

@@ -5,9 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Sdk;
 using Jellyfin.Sdk.Generated.Models;
 using Microsoft.Kiota.Abstractions.Serialization;
-using Windows.ApplicationModel.Core;
 using Windows.Graphics.Imaging;
-using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -33,25 +32,84 @@ public sealed partial class LazyLoadedImageViewModel : ObservableObject
     private bool _enableBlurHash = true;
 
     [ObservableProperty]
-    private ImageSource _imageSource;
+    private Uri _imageUri;
 
     [ObservableProperty]
-    private ImageSource _placeholderSource;
+    private ImageSource _blurHashImageSource;
 
     public LazyLoadedImageViewModel(JellyfinApiClient jellyfinApiClient)
     {
         _jellyfinApiClient = jellyfinApiClient;
     }
 
-    partial void OnItemChanged(BaseItemDto value) => OnPropertyChanged();
+    partial void OnItemChanged(BaseItemDto value) => InvalidateState();
 
-    partial void OnImageTypeChanged(ImageType? value) => OnPropertyChanged();
+    partial void OnImageTypeChanged(ImageType? value) => InvalidateState();
 
-    partial void OnWidthChanged(int value) => OnPropertyChanged();
+    partial void OnWidthChanged(int value) => InvalidateImage();
 
-    partial void OnHeightChanged(int value) => OnPropertyChanged();
+    partial void OnHeightChanged(int value) => InvalidateImage();
 
-    private async void OnPropertyChanged()
+    private void InvalidateState()
+    {
+        InvalidateBlurHash();
+        InvalidateImage();
+    }
+
+    private async void InvalidateBlurHash()
+    {
+        if (Item is null
+            || ImageType is null
+            || !EnableBlurHash)
+        {
+            return;
+        }
+
+        string imageTypeStr = ImageType.Value.ToString();
+        if (!Item.ImageTags.AdditionalData.TryGetValue(imageTypeStr, out object imageTagObj))
+        {
+            return;
+        }
+
+        string imageTag = imageTagObj.ToString();
+
+        // This is a little gross, but there doesn't seem to be a better way to do it.
+        IAdditionalDataHolder blurHashesForType = ImageType.Value switch
+        {
+            Sdk.Generated.Models.ImageType.Art => Item.ImageBlurHashes.Art,
+            Sdk.Generated.Models.ImageType.Backdrop => Item.ImageBlurHashes.Backdrop,
+            Sdk.Generated.Models.ImageType.Banner => Item.ImageBlurHashes.Banner,
+            Sdk.Generated.Models.ImageType.Box => Item.ImageBlurHashes.Box,
+            Sdk.Generated.Models.ImageType.BoxRear => Item.ImageBlurHashes.BoxRear,
+            Sdk.Generated.Models.ImageType.Chapter => Item.ImageBlurHashes.Chapter,
+            Sdk.Generated.Models.ImageType.Disc => Item.ImageBlurHashes.Disc,
+            Sdk.Generated.Models.ImageType.Logo => Item.ImageBlurHashes.Logo,
+            Sdk.Generated.Models.ImageType.Menu => Item.ImageBlurHashes.Menu,
+            Sdk.Generated.Models.ImageType.Primary => Item.ImageBlurHashes.Primary,
+            Sdk.Generated.Models.ImageType.Profile => Item.ImageBlurHashes.Profile,
+            Sdk.Generated.Models.ImageType.Screenshot => Item.ImageBlurHashes.Screenshot,
+            Sdk.Generated.Models.ImageType.Thumb => Item.ImageBlurHashes.Thumb,
+            _ => null,
+        };
+        string blurHash = null;
+        if (blurHashesForType is not null
+            && blurHashesForType.AdditionalData.TryGetValue(imageTag, out object blurHashObj))
+        {
+            blurHash = blurHashObj.ToString();
+        }
+
+        if (blurHash is not null)
+        {
+            SoftwareBitmap blurHashBitmap = CreateBlurHashImage(blurHash);
+
+            SoftwareBitmapSource blurHashSource = new();
+            await blurHashSource.SetBitmapAsync(blurHashBitmap);
+
+            BlurHashImageSource = blurHashSource;
+        }
+    }
+
+    private void InvalidateImage()
     {
         if (Item is null
             || ImageType is null
@@ -61,59 +119,7 @@ public sealed partial class LazyLoadedImageViewModel : ObservableObject
             return;
         }
 
-        string imageTypeStr = ImageType.Value.ToString();
-        if (!Item.ImageTags.AdditionalData.TryGetValue(imageTypeStr, out object imageTagObj))
-        {
-            // TODO: Is there some kind of placeholder we can use?
-            return;
-        }
-
-        string imageTag = imageTagObj.ToString();
-
-        if (EnableBlurHash)
-        {
-            // This is a little gross, but there doesn't seem to be a better way to do it.
-            IAdditionalDataHolder blurHashesForType = ImageType.Value switch
-            {
-                Sdk.Generated.Models.ImageType.Art => Item.ImageBlurHashes.Art,
-                Sdk.Generated.Models.ImageType.Backdrop => Item.ImageBlurHashes.Backdrop,
-                Sdk.Generated.Models.ImageType.Banner => Item.ImageBlurHashes.Banner,
-                Sdk.Generated.Models.ImageType.Box => Item.ImageBlurHashes.Box,
-                Sdk.Generated.Models.ImageType.BoxRear => Item.ImageBlurHashes.BoxRear,
-                Sdk.Generated.Models.ImageType.Chapter => Item.ImageBlurHashes.Chapter,
-                Sdk.Generated.Models.ImageType.Disc => Item.ImageBlurHashes.Disc,
-                Sdk.Generated.Models.ImageType.Logo => Item.ImageBlurHashes.Logo,
-                Sdk.Generated.Models.ImageType.Menu => Item.ImageBlurHashes.Menu,
-                Sdk.Generated.Models.ImageType.Primary => Item.ImageBlurHashes.Primary,
-                Sdk.Generated.Models.ImageType.Profile => Item.ImageBlurHashes.Profile,
-                Sdk.Generated.Models.ImageType.Screenshot => Item.ImageBlurHashes.Screenshot,
-                Sdk.Generated.Models.ImageType.Thumb => Item.ImageBlurHashes.Thumb,
-                _ => null,
-            };
-            string blurHash = null;
-            if (blurHashesForType is not null
-                && blurHashesForType.AdditionalData.TryGetValue(imageTag, out object blurHashObj))
-            {
-                blurHash = blurHashObj.ToString();
-            }
-
-            if (blurHash is not null)
-            {
-                SoftwareBitmap blurHashBitmap = CreateBlurHashImage(blurHash);
-
-                SoftwareBitmapSource blurHashSource = new();
-                await blurHashSource.SetBitmapAsync(blurHashBitmap);
-
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                    CoreDispatcherPriority.Normal,
-                    () => PlaceholderSource = blurHashSource);
-            }
-        }
-
-        Uri imageUri = _jellyfinApiClient.GetImageUri(Item, ImageType.Value, Width, Height);
-        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-            CoreDispatcherPriority.Low,
-            () => ImageSource = new BitmapImage(imageUri));
+        ImageUri = _jellyfinApiClient.GetImageUri(Item, ImageType.Value, Width, Height);
     }
 
     private static unsafe SoftwareBitmap CreateBlurHashImage(string blurhash)
