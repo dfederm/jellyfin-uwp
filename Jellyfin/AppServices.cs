@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Jellyfin.Controls;
 using Jellyfin.Sdk;
 using Jellyfin.Services;
 using Jellyfin.Views;
@@ -66,6 +67,7 @@ internal sealed class AppServices
         // View Models
         serviceCollection.AddTransient<HomeViewModel>();
         serviceCollection.AddTransient<ItemDetailsViewModel>();
+        serviceCollection.AddTransient<LazyLoadedImageViewModel>();
         serviceCollection.AddTransient<LoginViewModel>();
         serviceCollection.AddTransient<MainPageViewModel>();
         serviceCollection.AddTransient<MoviesViewModel>();

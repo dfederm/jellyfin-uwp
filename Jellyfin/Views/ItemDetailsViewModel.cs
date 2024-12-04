@@ -28,6 +28,7 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly NavigationManager _navigationManager;
 
+    [ObservableProperty]
     private BaseItemDto _item;
 
     [ObservableProperty]
@@ -35,12 +36,6 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
 
     [ObservableProperty]
     private Uri _backdropImageUri;
-
-    [ObservableProperty]
-    private Uri _logoImageUri;
-
-    [ObservableProperty]
-    private Uri _imageUri;
 
     [ObservableProperty]
     private ObservableCollection<MediaInfoItem> _mediaInfo;
@@ -98,57 +93,55 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
 
     public async void HandleParameters(ItemDetails.Parameters parameters)
     {
-        _item = await _jellyfinApiClient.Items[parameters.ItemId].GetAsync();
+        Item = await _jellyfinApiClient.Items[parameters.ItemId].GetAsync();
 
-        Name = _item.Name;
-        BackdropImageUri = _jellyfinApiClient.GetItemBackdropImageUrl(_item, 1920);
-        LogoImageUri = _jellyfinApiClient.GetImageUri(_item, ImageType.Logo, 300, 175);
-        ImageUri = _jellyfinApiClient.GetImageUri(_item, ImageType.Primary, 300, 450);
+        Name = Item.Name;
+        BackdropImageUri = _jellyfinApiClient.GetItemBackdropImageUrl(Item, 1920);
 
         List<MediaInfoItem> mediaInfo = new();
-        if (_item.ProductionYear.HasValue)
+        if (Item.ProductionYear.HasValue)
         {
-            mediaInfo.Add(new MediaInfoItem(_item.ProductionYear.ToString()));
+            mediaInfo.Add(new MediaInfoItem(Item.ProductionYear.ToString()));
         }
 
-        if (_item.RunTimeTicks.HasValue)
+        if (Item.RunTimeTicks.HasValue)
         {
-            mediaInfo.Add(new MediaInfoItem(GetDisplayDuration(_item.RunTimeTicks.Value)));
+            mediaInfo.Add(new MediaInfoItem(GetDisplayDuration(Item.RunTimeTicks.Value)));
         }
 
-        if (!string.IsNullOrEmpty(_item.OfficialRating))
+        if (!string.IsNullOrEmpty(Item.OfficialRating))
         {
             // TODO: Style correctly
-            mediaInfo.Add(new MediaInfoItem(_item.OfficialRating));
+            mediaInfo.Add(new MediaInfoItem(Item.OfficialRating));
         }
 
-        if (_item.CommunityRating.HasValue)
+        if (Item.CommunityRating.HasValue)
         {
             // TODO: Style correctly
-            mediaInfo.Add(new MediaInfoItem(_item.CommunityRating.Value.ToString("F1")));
+            mediaInfo.Add(new MediaInfoItem(Item.CommunityRating.Value.ToString("F1")));
         }
 
-        if (_item.CriticRating.HasValue)
+        if (Item.CriticRating.HasValue)
         {
             // TODO: Style correctly
-            mediaInfo.Add(new MediaInfoItem(_item.CriticRating.Value.ToString()));
+            mediaInfo.Add(new MediaInfoItem(Item.CriticRating.Value.ToString()));
         }
 
-        if (_item.RunTimeTicks.HasValue)
+        if (Item.RunTimeTicks.HasValue)
         {
-            mediaInfo.Add(new MediaInfoItem(GetEndsAt(_item.RunTimeTicks.Value)));
+            mediaInfo.Add(new MediaInfoItem(GetEndsAt(Item.RunTimeTicks.Value)));
         }
 
         MediaInfo = new ObservableCollection<MediaInfoItem>(mediaInfo);
 
-        SourceContainers = new ObservableCollection<MediaSourceInfo>(_item.MediaSources);
+        SourceContainers = new ObservableCollection<MediaSourceInfo>(Item.MediaSources);
 
         // This will trigger OnSelectedSourceContainerChanged, which populates the video, audio, and subtitle drop-downs.
         SelectedSourceContainer = SourceContainers[0];
 
-        TagLine = _item.Taglines.Count > 0 ? _item.Taglines[0] : null;
-        Overview = _item.Overview;
-        Tags = $"Tags: {string.Join(", ", _item.Tags)}";
+        TagLine = Item.Taglines.Count > 0 ? Item.Taglines[0] : null;
+        Overview = Item.Overview;
+        Tags = $"Tags: {string.Join(", ", Item.Tags)}";
 
         UpdateUserData();
     }
@@ -258,7 +251,7 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
     public void Play()
     {
         _navigationManager.NavigateToVideo(
-            _item,
+            Item,
             SelectedSourceContainer.Id,
             SelectedAudioStream?.Index,
             SelectedSubtitleStream?.Index);
@@ -266,9 +259,9 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
 
     public async void PlayTrailer()
     {
-        if (_item.LocalTrailerCount > 0)
+        if (Item.LocalTrailerCount > 0)
         {
-            List<BaseItemDto> localTrailers = await _jellyfinApiClient.Items[_item.Id.Value].LocalTrailers.GetAsync();
+            List<BaseItemDto> localTrailers = await _jellyfinApiClient.Items[Item.Id.Value].LocalTrailers.GetAsync();
             if (localTrailers.Count > 0)
             {
                 // TODO play all the trailers instead of just the first?
@@ -281,10 +274,10 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
             }
         }
 
-        if (_item.RemoteTrailers.Count > 0)
+        if (Item.RemoteTrailers.Count > 0)
         {
             // TODO play all the trailers instead of just the first?
-            Uri videoUri = GetWebVideoUri(_item.RemoteTrailers[0].Url);
+            Uri videoUri = GetWebVideoUri(Item.RemoteTrailers[0].Url);
 
             _navigationManager.NavigateToWebVideo(videoUri);
             return;
@@ -293,17 +286,17 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
 
     public async void TogglePlayed()
     {
-        _item.UserData = _item.UserData.Played.GetValueOrDefault()
-            ? await _jellyfinApiClient.UserPlayedItems[_item.Id.Value].DeleteAsync()
-            : await _jellyfinApiClient.UserPlayedItems[_item.Id.Value].PostAsync();
+        Item.UserData = Item.UserData.Played.GetValueOrDefault()
+            ? await _jellyfinApiClient.UserPlayedItems[Item.Id.Value].DeleteAsync()
+            : await _jellyfinApiClient.UserPlayedItems[Item.Id.Value].PostAsync();
         UpdateUserData();
     }
 
     public async void ToggleFavorite()
     {
-        _item.UserData = _item.UserData.IsFavorite.GetValueOrDefault()
-            ? await _jellyfinApiClient.UserFavoriteItems[_item.Id.Value].DeleteAsync()
-            : await _jellyfinApiClient.UserFavoriteItems[_item.Id.Value].PostAsync();
+        Item.UserData = Item.UserData.IsFavorite.GetValueOrDefault()
+            ? await _jellyfinApiClient.UserFavoriteItems[Item.Id.Value].DeleteAsync()
+            : await _jellyfinApiClient.UserFavoriteItems[Item.Id.Value].PostAsync();
         UpdateUserData();
     }
 
@@ -340,10 +333,10 @@ public sealed partial class ItemDetailsViewModel : ObservableObject
 
     private void UpdateUserData()
     {
-        IsPlayed = _item.UserData.Played.GetValueOrDefault();
+        IsPlayed = Item.UserData.Played.GetValueOrDefault();
         PlayStateBrush = IsPlayed ? OnBrush : OffBrush;
 
-        IsFavorite = _item.UserData.IsFavorite.GetValueOrDefault();
+        IsFavorite = Item.UserData.IsFavorite.GetValueOrDefault();
         FavoriteBrush = IsFavorite ? OnBrush : OffBrush;
     }
 

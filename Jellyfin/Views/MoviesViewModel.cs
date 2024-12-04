@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,8 +8,6 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-public sealed record Movie(Guid Id, string Name, Uri ImageUri);
-
 public sealed partial class MoviesViewModel : ObservableObject
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
@@ -19,7 +16,7 @@ public sealed partial class MoviesViewModel : ObservableObject
     private Guid? _collectionItemId;
 
     [ObservableProperty]
-    private ObservableCollection<Movie> _movies;
+    private ObservableCollection<BaseItemDto> _movies;
 
     public MoviesViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {
@@ -55,28 +52,16 @@ public sealed partial class MoviesViewModel : ObservableObject
             parameters.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Banner, ImageType.Thumb];
         });
 
-        List<Movie> movies = new();
-        foreach (BaseItemDto item in result.Items)
-        {
-            if (!item.Id.HasValue)
-            {
-                continue;
-            }
-
-            Guid itemId = item.Id.Value;
-            Uri imageUri = _jellyfinApiClient.GetImageUri(item, ImageType.Primary, Constants.CardImageWidth, Constants.TallCardImageHeight);
-            Movie movie = new(itemId, item.Name, imageUri);
-
-            movies.Add(movie);
-        }
-
-        Movies = new ObservableCollection<Movie>(movies);
+        Movies = new ObservableCollection<BaseItemDto>(result.Items);
     }
 
     [RelayCommand]
-    private void NavigateToMovie(Movie movie)
+    private void NavigateToMovie(BaseItemDto movie)
     {
-        _navigationManager.NavigateToItemDetails(movie.Id);
+        if (movie.Id.HasValue)
+        {
+            _navigationManager.NavigateToItemDetails(movie.Id.Value);
+        }
     }
 
 }
