@@ -155,8 +155,40 @@ public sealed partial class VideoViewModel : ObservableObject
             mediaSource = MediaSource.CreateFromUri(mediaUri);
         }
 
+        if (mediaSourceInfo.DefaultSubtitleStreamIndex.HasValue)
+        {
+            MediaStream subtitleTrack = mediaSourceInfo.MediaStreams[mediaSourceInfo.DefaultSubtitleStreamIndex.Value];
+            if (subtitleTrack.IsExternal.GetValueOrDefault())
+            {
+                // TODO: Check the subtitle format (Codec property), as some mayneed to be handled differently.
+                string subtitleUrl = subtitleTrack.DeliveryUrl;
+                if (!subtitleTrack.IsExternalUrl.GetValueOrDefault())
+                {
+                    subtitleUrl = _sdkClientSettings.ServerUrl + subtitleUrl;
+                }
+
+                if (Uri.TryCreate(subtitleUrl, UriKind.Absolute, out Uri subtitleUri))
+                {
+                    TimedTextSource timedTextSource = TimedTextSource.CreateFromUri(subtitleUri);
+                    mediaSource.ExternalTimedTextSources.Add(timedTextSource);
+                }
+                else
+                {
+                    // TODO: Error handling
+                }
+            }
+        }
+
+        MediaPlaybackItem playbackItem = new(mediaSource);
+
+        // Present the first track, which is the subtitles
+        playbackItem.TimedMetadataTracksChanged += (sender, args) =>
+        {
+            playbackItem.TimedMetadataTracks.SetPresentationMode(0, TimedMetadataTrackPresentationMode.PlatformPresented);
+        };
+
         _playerElement.SetMediaPlayer(new MediaPlayer());
-        _playerElement.MediaPlayer.Source = mediaSource;
+        _playerElement.MediaPlayer.Source = playbackItem;
 
         _playerElement.MediaPlayer.MediaEnded += async (mp, o) =>
         {
@@ -216,14 +248,14 @@ public sealed partial class VideoViewModel : ObservableObject
         {
             player.Pause();
 
-            MediaSource mediaSource = (MediaSource)player.Source;
+            MediaPlaybackItem mediaPlaybackItem = (MediaPlaybackItem)player.Source;
 
             // Detach components from each other
             _playerElement.SetMediaPlayer(null);
             player.Source = null;
 
             // Dispose components
-            mediaSource.Dispose();
+            mediaPlaybackItem.Source.Dispose();
             player.Dispose();
         }
 

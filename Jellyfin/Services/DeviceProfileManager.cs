@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Jellyfin.Sdk.Generated.Models;
 using Windows.Devices.Enumeration;
@@ -1072,6 +1071,13 @@ public sealed class DeviceProfileManager
         string subtitleBurninSetting = ""; // TODO: appSettings.get("subtitleburnin");
         if (subtitleBurninSetting != "all")
         {
+            profile.SubtitleProfiles.Add(
+                new SubtitleProfile
+                {
+                    Format = "subrip",
+                    Method = SubtitleProfile_Method.External,
+                });
+
             bool supportsTextTracks = false; // TODO: Check
             if (supportsTextTracks)
             {
