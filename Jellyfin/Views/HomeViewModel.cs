@@ -16,17 +16,21 @@ public sealed partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<BaseItemDto> _userViews;
 
+    [ObservableProperty]
+    private ObservableCollection<BaseItemDto> _continueWatchingItems;
+
     public HomeViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {
         _jellyfinApiClient = jellyfinApiClient;
         _navigationManager = navigationManager;
 
         InitializeUserViews();
+        InitializeContinueWatchingItems();
     }
 
     private async void InitializeUserViews()
     {
-        List<BaseItemDto> userViews = new();
+        List<BaseItemDto> items = new();
 
         BaseItemDtoQueryResult result = await _jellyfinApiClient.UserViews.GetAsync();
         foreach (BaseItemDto item in result.Items)
@@ -36,10 +40,28 @@ public sealed partial class HomeViewModel : ObservableObject
                 continue;
             }
 
-            userViews.Add(item);
+            items.Add(item);
         }
 
-        UserViews = new ObservableCollection<BaseItemDto>(result.Items);
+        UserViews = new ObservableCollection<BaseItemDto>(items);
+    }
+
+    private async void InitializeContinueWatchingItems()
+    {
+        List<BaseItemDto> items = new();
+
+        BaseItemDtoQueryResult result = await _jellyfinApiClient.UserItems.Resume.GetAsync();
+        foreach (BaseItemDto item in result.Items)
+        {
+            if (!item.Id.HasValue)
+            {
+                continue;
+            }
+
+            items.Add(item);
+        }
+
+        ContinueWatchingItems = new ObservableCollection<BaseItemDto>(items);
     }
 
     [RelayCommand]

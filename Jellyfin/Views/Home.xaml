@@ -65,6 +65,41 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                <!-- TODO: Don't render if there are no items -->
+                <!-- TODO: Create Card user control for reuseability and customizability -->
+                <TextBlock
+                    Text="Continue Watching" 
+                    Foreground="White"
+                    FontSize="{StaticResource FontL}"
+                    FontFamily="{StaticResource JellyfinFamilyFont}"
+                    Margin="0 0 0 28"
+                    HorizontalAlignment="Left" />
+                <ListView
+                    ItemsSource="{x:Bind ViewModel.ContinueWatchingItems, Mode=OneWay}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BaseItemDto">
+                            <StackPanel>
+                                <uc:LazyLoadedImage
+                                    Item="{x:Bind}"
+                                    ImageType="Primary"
+                                    Width="{x:Bind app:Constants.CardImageWidth}"
+                                    Height="{x:Bind app:Constants.WideCardImageHeight}" />
+                                <TextBlock
+                                    Text="{x:Bind Name}"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
         </Grid>
     </Grid>

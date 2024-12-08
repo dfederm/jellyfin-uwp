@@ -18,15 +18,15 @@
             Canvas.ZIndex="0" />
         <Image
             Name="Image"
+            Width="{x:Bind ViewModel.Width, Mode=OneWay}"
+            Height="{x:Bind ViewModel.Height, Mode=OneWay}"
             Canvas.ZIndex="1"
             Opacity="0"
             ImageOpened="ImageOpened">
             <Image.Source>
                 <BitmapImage
                     UriSource="{x:Bind ViewModel.ImageUri, Mode=OneWay}"
-                    CreateOptions="IgnoreImageCache"
-                    DecodePixelWidth="{x:Bind ViewModel.Width, Mode=OneWay}"
-                    DecodePixelHeight="{x:Bind ViewModel.Height, Mode=OneWay}"/>
+                    CreateOptions="IgnoreImageCache" />
             </Image.Source>
         </Image>
     </Canvas>
