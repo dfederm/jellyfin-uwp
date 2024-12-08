@@ -39,21 +39,12 @@ public sealed partial class HomeViewModel : ObservableObject
             userViews.Add(item);
         }
 
-        UserViews = new ObservableCollection<BaseItemDto>(userViews);
+        UserViews = new ObservableCollection<BaseItemDto>(result.Items);
     }
 
     [RelayCommand]
-    private void NavigateToUserView(BaseItemDto userView)
+    private void NavigateToItem(BaseItemDto item)
     {
-        if (userView.Id.HasValue)
-        {
-            if (userView.CollectionType.HasValue)
-            {
-                if (userView.CollectionType.Value == BaseItemDto_CollectionType.Movies)
-                {
-                    _navigationManager.NavigateToMovies(userView.Id.Value);
-                }
-            }
-        }
+        _navigationManager.NavigateToItem(item);
     }
 }

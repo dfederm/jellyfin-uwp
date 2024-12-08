@@ -56,12 +56,8 @@ public sealed partial class MoviesViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void NavigateToMovie(BaseItemDto movie)
+    private void NavigateToItem(BaseItemDto item)
     {
-        if (movie.Id.HasValue)
-        {
-            _navigationManager.NavigateToItemDetails(movie.Id.Value);
-        }
+        _navigationManager.NavigateToItem(item);
     }
-
 }

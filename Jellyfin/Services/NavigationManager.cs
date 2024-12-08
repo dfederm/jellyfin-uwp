@@ -80,16 +80,34 @@ public sealed class NavigationManager
         NavigateContentFrame<Home>();
     }
 
-    public void NavigateToMovies(Guid id)
+    public void NavigateToItem(BaseItemDto item)
     {
-        CurrentItem = id;
-        NavigateContentFrame<Movies>(new Movies.Parameters(id));
-    }
+        Guid itemId = item.Id.Value;
+        switch (item.Type)
+        {
+            case BaseItemDto_Type.CollectionFolder:
+            {
+                switch (item.CollectionType)
+                {
+                    case BaseItemDto_CollectionType.Movies:
+                    {
+                        CurrentItem = itemId;
+                        NavigateContentFrame<Movies>(new Movies.Parameters(itemId));
+                        return;
+                    }
+                }
 
-    public void NavigateToItemDetails(Guid id)
-    {
-        CurrentItem = id;
-        NavigateContentFrame<ItemDetails>(new ItemDetails.Parameters(id));
+                break;
+            }
+            case BaseItemDto_Type.Movie:
+            {
+                CurrentItem = itemId;
+                NavigateContentFrame<ItemDetails>(new ItemDetails.Parameters(itemId));
+                return;
+            }
+        }
+
+        // TODO: Some kind of error message.
     }
 
     public void NavigateToVideo(BaseItemDto item, string mediaSourceId, int? audioStreamIndex, int? subtitleStreamIndex)

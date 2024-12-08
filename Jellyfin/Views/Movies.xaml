@@ -30,7 +30,7 @@
                 ItemsSource="{x:Bind ViewModel.Movies, Mode=OneWay}"
                 SelectionMode="None"
                 IsItemClickEnabled="True"
-                Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToMovieCommand}">
+                Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
                 <Interactivity:Interaction.Behaviors>
                   <Behaviors:FocusFirstItemOnLoadBehavior />
                 </Interactivity:Interaction.Behaviors>

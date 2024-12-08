@@ -112,7 +112,7 @@ public sealed partial class MainPageViewModel : ObservableObject
                 {
                     Content = item.Name,
                     Icon = new SymbolIcon(Symbol.Library),
-                    Tag = new NavigationViewItemContext(() => _navigationManager.NavigateToMovies(itemId), itemId),
+                    Tag = new NavigationViewItemContext(() => _navigationManager.NavigateToItem(item), itemId),
                 });
             }
             else
