@@ -15,12 +15,27 @@ public static class JellyfinApiClientExtensions
         int height)
     {
         string imageTypeStr = imageType.ToString();
-        if (!item.ImageTags.AdditionalData.TryGetValue(imageTypeStr, out object imageTagObj))
-        {
-            return null;
-        }
 
-        string imageTag = imageTagObj.ToString();
+        // TODO: This is a bit messy. Clean up.
+        string imageTag;
+        if (imageType == ImageType.Backdrop)
+        {
+            if (item.BackdropImageTags is null || item.BackdropImageTags.Count == 0)
+            {
+                return null;
+            }
+
+            imageTag = item.BackdropImageTags[0];
+        }
+        else
+        {
+            if (!item.ImageTags.AdditionalData.TryGetValue(imageTypeStr, out object imageTagObj))
+            {
+                return null;
+            }
+
+            imageTag = imageTagObj.ToString();
+        }
 
         RequestInformation imageRequest = jellyfinApiClient.Items[item.Id.Value].Images[imageTypeStr].ToGetRequestInformation(
             request =>

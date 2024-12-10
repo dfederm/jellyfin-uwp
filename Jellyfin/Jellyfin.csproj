@@ -143,7 +143,11 @@
     <Compile Include="Behaviors\FocusOnLoadBehavior.cs" />
     <Compile Include="Behaviors\ListViewBaseCommandBehavior.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\Card.xaml.cs">
+      <DependentUpon>Card.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CardShape.cs" />
+    <Compile Include="Controls\CardViewModel.cs" />
     <Compile Include="Controls\LazyLoadedImage.xaml.cs">
       <DependentUpon>LazyLoadedImage.xaml</DependentUpon>
     </Compile>
@@ -253,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\Card.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LazyLoadedImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

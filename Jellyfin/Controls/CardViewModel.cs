@@ -1,0 +1,95 @@
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Jellyfin.Sdk.Generated.Models;
+
+namespace Jellyfin.Controls;
+
+public sealed partial class CardViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private BaseItemDto _item;
+
+    [ObservableProperty]
+    private CardShape _shape;
+
+    [ObservableProperty]
+    private ImageType? _preferredImageType;
+
+    [ObservableProperty]
+    private string _name;
+
+    [ObservableProperty]
+    private ImageType _imageType;
+
+    [ObservableProperty]
+    private int _imageWidth;
+
+    [ObservableProperty]
+    private int _imageHeight;
+
+    partial void OnItemChanged(BaseItemDto value) => InvalidateState();
+
+    partial void OnShapeChanged(CardShape shape) => InvalidateState();
+
+    partial void OnPreferredImageTypeChanged(ImageType? preferredImageType) => InvalidateState();
+
+    private void InvalidateState()
+    {
+        if (Item is null)
+        {
+            return;
+        }
+
+        Name = Item.Name;
+
+        double aspectRatio = GetAspectRatio(Shape);
+        ImageType imageType;
+        int imageWidth = 300;
+
+        // TODO: A bunch of logic is missing here
+        if (PreferredImageType == ImageType.Thumb
+            && (Item.ImageTags?.AdditionalData.ContainsKey(nameof(ImageType.Thumb)) ?? false))
+        {
+            imageType = ImageType.Thumb;
+        }
+        else if (PreferredImageType == ImageType.Thumb
+            && Item.BackdropImageTags?.Count > 0)
+        {
+            imageType = ImageType.Backdrop;
+        }
+        else if (Item.ImageTags?.AdditionalData.ContainsKey(nameof(ImageType.Primary)) ?? false
+            && (Item.Type != BaseItemDto_Type.Episode || Item.ChildCount != 0))
+        {
+            imageType = ImageType.Primary;
+
+            if (Item.PrimaryImageAspectRatio.HasValue)
+            {
+                aspectRatio = Item.PrimaryImageAspectRatio.Value;
+            }
+        }
+        else if (Item.BackdropImageTags?.Count > 0)
+        {
+            imageType = ImageType.Backdrop;
+        }
+        else
+        {
+            imageType = ImageType.Primary;
+        }
+
+        int imageHeight = (int)Math.Round(imageWidth / aspectRatio);
+
+        ImageType = imageType;
+        ImageWidth = imageWidth;
+        ImageHeight = imageHeight;
+    }
+
+    private double GetAspectRatio(CardShape shape)
+        => shape switch
+        {
+            CardShape.Portrait => 2d / 3d,
+            CardShape.Backdrop => 16d / 9d,
+            CardShape.Square => 1d,
+            CardShape.Banner => 1000d / 185d,
+            _ => throw new NotImplementedException(),
+        };
+}

@@ -7,7 +7,6 @@
     xmlns:Behaviors="using:Jellyfin.Behaviors"
     xmlns:uc="using:Jellyfin.Controls"
     xmlns:local="using:Jellyfin.Views"
-    xmlns:app="using:Jellyfin"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -52,16 +51,9 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:BaseItemDto">
-                            <StackPanel>
-                                <uc:LazyLoadedImage
-                                    Item="{x:Bind}"
-                                    ImageType="Primary"
-                                    Width="{x:Bind app:Constants.CardImageWidth}"
-                                    Height="{x:Bind app:Constants.WideCardImageHeight}" />
-                                <TextBlock
-                                    Text="{x:Bind Name}"
-                                    TextAlignment="Center" />
-                            </StackPanel>
+                            <uc:Card
+                                Item="{x:Bind}"
+                                Shape="Backdrop" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -87,16 +79,9 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:BaseItemDto">
-                            <StackPanel>
-                                <uc:LazyLoadedImage
-                                    Item="{x:Bind}"
-                                    ImageType="Primary"
-                                    Width="{x:Bind app:Constants.CardImageWidth}"
-                                    Height="{x:Bind app:Constants.WideCardImageHeight}" />
-                                <TextBlock
-                                    Text="{x:Bind Name}"
-                                    TextAlignment="Center" />
-                            </StackPanel>
+                            <uc:Card
+                                Item="{x:Bind}"
+                                Shape="Backdrop" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

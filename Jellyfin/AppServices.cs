@@ -65,6 +65,7 @@ internal sealed class AppServices
         serviceCollection.AddSingleton<DeviceProfileManager>();
 
         // View Models
+        serviceCollection.AddTransient<CardViewModel>();
         serviceCollection.AddTransient<HomeViewModel>();
         serviceCollection.AddTransient<ItemDetailsViewModel>();
         serviceCollection.AddTransient<LazyLoadedImageViewModel>();

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Jellyfin.Sdk.Generated.Models;
+﻿using Jellyfin.Sdk.Generated.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;

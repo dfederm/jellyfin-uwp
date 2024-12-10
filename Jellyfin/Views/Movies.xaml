@@ -5,7 +5,6 @@
     xmlns:models="using:Jellyfin.Sdk.Generated.Models"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:Behaviors="using:Jellyfin.Behaviors"
-    xmlns:app="using:Jellyfin"
     xmlns:uc="using:Jellyfin.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -41,16 +40,9 @@
                 </GridView.ItemsPanel>
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="models:BaseItemDto">
-                        <StackPanel>
-                            <uc:LazyLoadedImage
-                                Item="{x:Bind}"
-                                ImageType="Primary"
-                                Width="{x:Bind app:Constants.CardImageWidth}"
-                                Height="{x:Bind app:Constants.TallCardImageHeight}" />
-                            <TextBlock
-                                Text="{x:Bind Name}"
-                                TextAlignment="Center" />
-                        </StackPanel>
+                        <uc:Card
+                            Item="{x:Bind}"
+                            Shape="Portrait" />
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
