@@ -33,7 +33,6 @@
                     Text="Connect to Jellyfin Server" 
                     Foreground="White"
                     FontSize="{StaticResource FontL}"
-                    FontFamily="{StaticResource JellyfinFamilyFont}"
                     Margin="0 0 0 28"
                     HorizontalAlignment="Center" />
                 <TextBox
@@ -49,7 +48,6 @@
                 <TextBlock 
                     Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
                     Visibility="{x:Bind ViewModel.ShowErrorMessage, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    FontFamily="{StaticResource JellyfinFamilyFont}"
                     HorizontalAlignment="Center"
                     TextAlignment="Center"
                     TextWrapping="Wrap"

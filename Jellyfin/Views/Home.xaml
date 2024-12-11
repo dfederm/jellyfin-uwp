@@ -25,7 +25,7 @@
                 Height="28"
                 Margin="28 0 0 0" />
         </Grid>
-        <Grid Grid.Row="1" Padding="0 40 0 0">
+        <Grid Grid.Row="1">
             <StackPanel 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top">
@@ -33,13 +33,13 @@
                     Text="My Media" 
                     Foreground="White"
                     FontSize="{StaticResource FontL}"
-                    FontFamily="{StaticResource JellyfinFamilyFont}"
-                    Margin="0 0 0 28"
+                    Margin="20 10 0 5"
                     HorizontalAlignment="Left" />
                 <ListView
                     ItemsSource="{x:Bind ViewModel.UserViews, Mode=OneWay}"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
+                    Margin="8 0 20 10"
                     Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
                   <Interactivity:Interaction.Behaviors>
                     <Behaviors:FocusFirstItemOnLoadBehavior />
@@ -64,13 +64,13 @@
                     Text="Continue Watching" 
                     Foreground="White"
                     FontSize="{StaticResource FontL}"
-                    FontFamily="{StaticResource JellyfinFamilyFont}"
-                    Margin="0 0 0 28"
+                    Margin="20 10 0 5"
                     HorizontalAlignment="Left" />
                 <ListView
                     ItemsSource="{x:Bind ViewModel.ContinueWatchingItems, Mode=OneWay}"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
+                    Margin="8 0 20 10"
                     Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -81,7 +81,8 @@
                         <DataTemplate x:DataType="models:BaseItemDto">
                             <uc:Card
                                 Item="{x:Bind}"
-                                Shape="Backdrop" />
+                                Shape="Backdrop"
+                                PreferredImageType="Thumb" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
