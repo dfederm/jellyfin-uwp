@@ -181,6 +181,10 @@
       <DependentUpon>ServerSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServerSelectionViewModel.cs" />
+    <Compile Include="Views\Shows.xaml.cs">
+      <DependentUpon>Shows.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowsViewModel.cs" />
     <Compile Include="Views\Video.xaml.cs">
       <DependentUpon>Video.xaml</DependentUpon>
     </Compile>
@@ -292,6 +296,10 @@
     <Page Include="Views\ServerSelection.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Shows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Video.xaml">
       <Generator>MSBuild:Compile</Generator>

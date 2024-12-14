@@ -95,6 +95,12 @@ public sealed class NavigationManager
                         NavigateContentFrame<Movies>(new Movies.Parameters(itemId));
                         return;
                     }
+                    case BaseItemDto_CollectionType.Tvshows:
+                    {
+                        CurrentItem = itemId;
+                        NavigateContentFrame<Shows>(new Shows.Parameters(itemId));
+                        return;
+                    }
                 }
 
                 break;
