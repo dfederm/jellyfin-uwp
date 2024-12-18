@@ -10,7 +10,7 @@ namespace Jellyfin.Behaviors;
 /// <summary>
 /// Focuses the first item in a list on the loaded event.
 /// </summary>
-public class FocusFirstItemOnLoadBehavior : Behavior<ListViewBase>
+internal class FocusFirstItemOnLoadBehavior : Behavior<ListViewBase>
 {
     // Need to track whether we've attached to the collection changed event
     bool _collectionChangedSubscribed = false;

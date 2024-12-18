@@ -4,7 +4,7 @@ using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Controls;
 
-public sealed partial class CardViewModel : ObservableObject
+internal sealed partial class CardViewModel : ObservableObject
 {
     [ObservableProperty]
     private BaseItemDto _item;

@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Services;
 
-public sealed class NavigationManager
+internal sealed class NavigationManager
 {
     // Fake item id used to identify the home page
     public static readonly Guid HomeId = new Guid("CDF95D47-90C2-4057-B12C-BA81C34F2CB9");

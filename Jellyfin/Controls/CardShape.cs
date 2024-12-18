@@ -1,6 +1,6 @@
 ﻿namespace Jellyfin.Controls;
 
-public enum CardShape
+internal enum CardShape
 {
     Portrait,
     Backdrop,

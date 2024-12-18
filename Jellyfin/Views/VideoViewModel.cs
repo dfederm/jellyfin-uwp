@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Views;
 
-public sealed partial class VideoViewModel : ObservableObject
+internal sealed partial class VideoViewModel : ObservableObject
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly JellyfinSdkSettings _sdkClientSettings;

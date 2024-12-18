@@ -8,7 +8,7 @@ namespace Jellyfin.Common;
 /// Value converter that translates true to <see cref="Visibility.Visible"/> and false to
 /// <see cref="Visibility.Collapsed"/>, or the reverse if the parameter is "Reverse".
 /// </summary>
-public class BooleanToVisibilityConverter : IValueConverter
+internal sealed class BooleanToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
         => ((value is bool b && b)

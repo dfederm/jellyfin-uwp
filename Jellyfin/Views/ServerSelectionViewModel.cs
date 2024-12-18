@@ -8,7 +8,7 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-public sealed partial class ServerSelectionViewModel : ObservableValidator
+internal sealed partial class ServerSelectionViewModel : ObservableValidator
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinSdkSettings _sdkClientSettings;

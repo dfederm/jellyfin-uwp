@@ -2,7 +2,7 @@
 
 namespace Jellyfin;
 
-public class AppSettings
+internal sealed class AppSettings
 {
     public string ServerUrl
     {

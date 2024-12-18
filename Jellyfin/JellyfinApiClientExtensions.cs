@@ -5,7 +5,7 @@ using Microsoft.Kiota.Abstractions;
 
 namespace Jellyfin;
 
-public static class JellyfinApiClientExtensions
+internal static class JellyfinApiClientExtensions
 {
     public static Uri GetImageUri(
         this JellyfinApiClient jellyfinApiClient,

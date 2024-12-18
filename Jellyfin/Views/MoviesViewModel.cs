@@ -8,7 +8,7 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-public sealed partial class MoviesViewModel : ObservableObject
+internal sealed partial class MoviesViewModel : ObservableObject
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly NavigationManager _navigationManager;

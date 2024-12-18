@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jellyfin.Controls;
 
-public sealed partial class LazyLoadedImageViewModel : ObservableObject
+internal sealed partial class LazyLoadedImageViewModel : ObservableObject
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
 

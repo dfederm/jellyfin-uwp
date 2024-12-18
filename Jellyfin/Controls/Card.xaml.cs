@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Controls;
 
-public sealed partial class Card : UserControl
+internal sealed partial class Card : UserControl
 {
     public Card()
     {

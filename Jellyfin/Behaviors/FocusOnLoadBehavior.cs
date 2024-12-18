@@ -7,7 +7,7 @@ namespace Jellyfin.Behaviors;
 /// <summary>
 /// Focuses a control on the loaded event.
 /// </summary>
-public class FocusOnLoadBehavior : Behavior<Control>
+internal sealed class FocusOnLoadBehavior : Behavior<Control>
 {
     protected override void OnAttached()
     {

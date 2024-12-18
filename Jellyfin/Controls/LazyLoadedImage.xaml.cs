@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Controls;
 
-public sealed partial class LazyLoadedImage : UserControl
+internal sealed partial class LazyLoadedImage : UserControl
 {
     public LazyLoadedImage()
     {

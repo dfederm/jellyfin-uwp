@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin;
 
-public sealed partial class MainPageViewModel : ObservableObject
+internal sealed partial class MainPageViewModel : ObservableObject
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinApiClient _jellyfinApiClient;
@@ -155,5 +155,5 @@ public sealed partial class MainPageViewModel : ObservableObject
         NavigationItems = new ObservableCollection<NavigationViewItemBase>(navigationItems);
     }
 
-    public record NavigationViewItemContext(Action NavigateAction, Guid? ItemId);
+    internal record NavigationViewItemContext(Action NavigateAction, Guid? ItemId);
 }

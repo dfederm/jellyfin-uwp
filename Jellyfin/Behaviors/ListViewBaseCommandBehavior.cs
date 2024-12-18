@@ -7,7 +7,7 @@ namespace Jellyfin.Behaviors;
 /// <summary>
 /// Creates an attached property for all ListViewBase controls allowing binding  a command object to it's ItemClick event.
 /// </summary>
-public static class ListViewBaseCommandBehavior
+internal static class ListViewBaseCommandBehavior
 {
     public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
         "Command",

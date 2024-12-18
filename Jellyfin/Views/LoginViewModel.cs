@@ -10,7 +10,7 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-public sealed partial class LoginViewModel : ObservableValidator
+internal sealed partial class LoginViewModel : ObservableValidator
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinSdkSettings _sdkClientSettings;

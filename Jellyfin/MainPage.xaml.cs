@@ -1,5 +1,4 @@
 ﻿using System;
-using Jellyfin.Sdk;
 using Jellyfin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Core;
@@ -9,7 +8,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Jellyfin;
 
-public sealed partial class MainPage : Page
+internal sealed partial class MainPage : Page
 {
     private readonly NavigationManager _navigationManager;
 
@@ -112,5 +111,5 @@ public sealed partial class MainPage : Page
         }
     }
 
-    public record Parameters(Action DeferredNavigationAction);
+    internal record Parameters(Action DeferredNavigationAction);
 }

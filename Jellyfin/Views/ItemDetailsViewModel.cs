@@ -13,14 +13,14 @@ using Windows.UI.Xaml.Media;
 
 namespace Jellyfin.Views;
 
-public sealed record MediaInfoItem(string Text);
+internal sealed record MediaInfoItem(string Text);
 
-public sealed record MediaStreamOption(string DisplayText, int? Index)
+internal sealed record MediaStreamOption(string DisplayText, int? Index)
 {
     public static MediaStreamOption SubtitlesOff { get; } = new("Off", -1);
 }
 
-public sealed partial class ItemDetailsViewModel : ObservableObject
+internal sealed partial class ItemDetailsViewModel : ObservableObject
 {
     private static readonly SolidColorBrush OnBrush = new SolidColorBrush(Colors.Red);
     private static readonly SolidColorBrush OffBrush = new SolidColorBrush(Colors.White);

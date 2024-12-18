@@ -10,7 +10,7 @@ using Windows.Media.Render;
 
 namespace Jellyfin.Services;
 
-public sealed class DeviceProfileManager
+internal sealed class DeviceProfileManager
 {
     public DeviceProfile Profile { get; private set; }
 

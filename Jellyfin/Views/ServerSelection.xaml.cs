@@ -3,7 +3,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Views;
 
-public sealed partial class ServerSelection : Page
+internal sealed partial class ServerSelection : Page
 {
     public ServerSelection()
     {
