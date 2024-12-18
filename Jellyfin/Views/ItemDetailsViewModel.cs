@@ -301,7 +301,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
     }
 
     // Return a string in '{}h {}m' format for duration.
-    private string GetDisplayDuration(long ticks)
+    private static string GetDisplayDuration(long ticks)
     {
         int totalMinutes = (int)Math.Round(ticks / 600000000d);
         if (totalMinutes == 0)
@@ -325,7 +325,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         return sb.ToString();
     }
 
-    private string GetEndsAt(long ticks)
+    private static string GetEndsAt(long ticks)
     {
         DateTime endDate = DateTime.Now + TimeSpan.FromTicks(ticks);
         return $"Ends at {endDate:t}";
@@ -340,7 +340,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         FavoriteBrush = IsFavorite ? OnBrush : OffBrush;
     }
 
-    private Uri GetWebVideoUri(string url)
+    private static Uri GetWebVideoUri(string url)
     {
         Match match = YouTubeRegex.Match(url);
         if (match.Success)

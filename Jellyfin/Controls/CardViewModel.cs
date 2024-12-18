@@ -83,7 +83,7 @@ internal sealed partial class CardViewModel : ObservableObject
         ImageHeight = imageHeight;
     }
 
-    private double GetAspectRatio(CardShape shape)
+    private static double GetAspectRatio(CardShape shape)
         => shape switch
         {
             CardShape.Portrait => 2d / 3d,

@@ -13,7 +13,7 @@ namespace Jellyfin.Behaviors;
 internal class FocusFirstItemOnLoadBehavior : Behavior<ListViewBase>
 {
     // Need to track whether we've attached to the collection changed event
-    bool _collectionChangedSubscribed = false;
+    private bool _collectionChangedSubscribed;
 
     protected override void OnAttached()
     {

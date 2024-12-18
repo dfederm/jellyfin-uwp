@@ -1126,7 +1126,7 @@ internal sealed class DeviceProfileManager
         Profile = profile;
     }
 
-    private async Task<uint> GetAudioChannelCountAsync()
+    private static async Task<uint> GetAudioChannelCountAsync()
     {
         string defaultAudioRenderDeviceId = MediaDevice.GetDefaultAudioRenderId(AudioDeviceRole.Default);
         DeviceInformation defaultAudioDevice = await DeviceInformation.CreateFromIdAsync(defaultAudioRenderDeviceId);

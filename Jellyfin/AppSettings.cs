@@ -16,10 +16,10 @@ internal sealed class AppSettings
         set => SetProperty(nameof(AccessToken), value);
     }
 
-    private void SetProperty(string propertyName, object value)
+    private static void SetProperty(string propertyName, object value)
         => ApplicationData.Current.LocalSettings.Values[propertyName] = value;
 
-    public T GetProperty<T>(string propertyName, T defaultValue = default)
+    private static T GetProperty<T>(string propertyName, T defaultValue = default)
     {
         object value = ApplicationData.Current.LocalSettings.Values[propertyName];
         return value != null ? (T)value : defaultValue;

@@ -128,7 +128,7 @@ sealed partial class App : Application
     /// </summary>
     /// <param name="sender">The Frame which failed navigation</param>
     /// <param name="e">Details about the navigation failure</param>
-    void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+    private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
     {
         throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
     }
@@ -147,7 +147,7 @@ sealed partial class App : Application
         deferral.Complete();
     }
 
-    private void ConfigureWebView2()
+    private static void ConfigureWebView2()
     {
         // Allow video to auto-play
         Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--autoplay-policy=no-user-gesture-required");
