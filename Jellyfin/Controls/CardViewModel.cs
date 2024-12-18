@@ -29,9 +29,9 @@ internal sealed partial class CardViewModel : ObservableObject
 
     partial void OnItemChanged(BaseItemDto value) => InvalidateState();
 
-    partial void OnShapeChanged(CardShape shape) => InvalidateState();
+    partial void OnShapeChanged(CardShape value) => InvalidateState();
 
-    partial void OnPreferredImageTypeChanged(ImageType? preferredImageType) => InvalidateState();
+    partial void OnPreferredImageTypeChanged(ImageType? value) => InvalidateState();
 
     private void InvalidateState()
     {

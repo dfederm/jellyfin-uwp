@@ -91,7 +91,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         _navigationManager = navigationManager;
     }
 
-    public async void HandleParameters(ItemDetails.Parameters parameters)
+    internal async void HandleParameters(ItemDetails.Parameters parameters)
     {
         Item = await _jellyfinApiClient.Items[parameters.ItemId].GetAsync();
 
@@ -146,11 +146,11 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         UpdateUserData();
     }
 
-    partial void OnSelectedSourceContainerChanged(MediaSourceInfo mediaSourceInfo)
+    partial void OnSelectedSourceContainerChanged(MediaSourceInfo value)
     {
-        DetermineVideoOptions(mediaSourceInfo);
-        DetermineAudioOptions(mediaSourceInfo);
-        DetermineSubtitleOptions(mediaSourceInfo);
+        DetermineVideoOptions(value);
+        DetermineAudioOptions(value);
+        DetermineSubtitleOptions(value);
     }
 
     private void DetermineVideoOptions(MediaSourceInfo mediaSourceInfo)

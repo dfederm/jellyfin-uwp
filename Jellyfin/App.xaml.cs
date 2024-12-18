@@ -49,8 +49,8 @@ sealed partial class App : Application
     /// Invoked when the application is launched normally by the end user.  Other entry points
     /// will be used such as when the application is launched to open a specific file.
     /// </summary>
-    /// <param name="e">Details about the launch request and process.</param>
-    protected override void OnLaunched(LaunchActivatedEventArgs e)
+    /// <param name="args">Details about the launch request and process.</param>
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         Frame rootFrame = Window.Current.Content as Frame;
 
@@ -74,7 +74,7 @@ sealed partial class App : Application
                 ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             }
 
-            if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+            if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
             {
                 //TODO: Load state from previously suspended application
             }
@@ -83,7 +83,7 @@ sealed partial class App : Application
             Window.Current.Content = rootFrame;
         }
 
-        if (!e.PrelaunchActivated)
+        if (!args.PrelaunchActivated)
         {
             if (rootFrame.Content == null)
             {
@@ -92,7 +92,7 @@ sealed partial class App : Application
                 // parameter
                 if (_appSettings.ServerUrl is null)
                 {
-                    rootFrame.Navigate(typeof(ServerSelection), e.Arguments);
+                    rootFrame.Navigate(typeof(ServerSelection), args.Arguments);
                 }
                 else
                 {
@@ -101,14 +101,14 @@ sealed partial class App : Application
 
                     if (_appSettings.AccessToken is null)
                     {
-                        rootFrame.Navigate(typeof(Login), e.Arguments);
+                        rootFrame.Navigate(typeof(Login), args.Arguments);
                     }
                     else
                     {
                         // TODO: Validate the access token is still valid
                         _sdkClientSettings.SetAccessToken(_appSettings.AccessToken);
 
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                        rootFrame.Navigate(typeof(MainPage), args.Arguments);
                     }
                 }
             }
