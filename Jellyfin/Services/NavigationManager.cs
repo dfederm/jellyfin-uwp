@@ -83,37 +83,31 @@ internal sealed class NavigationManager
     public void NavigateToItem(BaseItemDto item)
     {
         Guid itemId = item.Id.Value;
-        switch (item.Type)
+        if (item.Type == BaseItemDto_Type.CollectionFolder)
         {
-            case BaseItemDto_Type.CollectionFolder:
+            switch (item.CollectionType)
             {
-                switch (item.CollectionType)
+                case BaseItemDto_CollectionType.Movies:
                 {
-                    case BaseItemDto_CollectionType.Movies:
-                    {
-                        CurrentItem = itemId;
-                        NavigateContentFrame<Movies>(new Movies.Parameters(itemId));
-                        return;
-                    }
-                    case BaseItemDto_CollectionType.Tvshows:
-                    {
-                        CurrentItem = itemId;
-                        NavigateContentFrame<Shows>(new Shows.Parameters(itemId));
-                        return;
-                    }
+                    CurrentItem = itemId;
+                    NavigateContentFrame<Movies>(new Movies.Parameters(itemId));
+                    return;
                 }
+                case BaseItemDto_CollectionType.Tvshows:
+                {
+                    CurrentItem = itemId;
+                    NavigateContentFrame<Shows>(new Shows.Parameters(itemId));
+                    return;
+                }
+            }
 
-                break;
-            }
-            case BaseItemDto_Type.Movie:
-            {
-                CurrentItem = itemId;
-                NavigateContentFrame<ItemDetails>(new ItemDetails.Parameters(itemId));
-                return;
-            }
+            // TODO: Some kind of error message. Or genericize the collection view.
         }
-
-        // TODO: Some kind of error message.
+        else
+        {
+            CurrentItem = itemId;
+            NavigateContentFrame<ItemDetails>(new ItemDetails.Parameters(itemId));
+        }
     }
 
     public void NavigateToVideo(BaseItemDto item, string mediaSourceId, int? audioStreamIndex, int? subtitleStreamIndex)

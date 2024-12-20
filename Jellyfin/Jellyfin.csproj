@@ -143,6 +143,7 @@
     <Compile Include="Behaviors\FocusOnLoadBehavior.cs" />
     <Compile Include="Behaviors\ListViewBaseCommandBehavior.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\VisibleIfNotNullConverter.cs" />
     <Compile Include="Controls\Card.xaml.cs">
       <DependentUpon>Card.xaml</DependentUpon>
     </Compile>

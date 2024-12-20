@@ -136,7 +136,8 @@
                         Orientation="Vertical"
                         Background="#101010"
                         Padding="400 20 0 0">
-                        <Grid>
+                        <Grid
+                            Visibility="{x:Bind ViewModel.SourceContainers, Mode=OneWay, Converter={StaticResource VisibleIfNotNullConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100" />
                                 <ColumnDefinition Width="550" />

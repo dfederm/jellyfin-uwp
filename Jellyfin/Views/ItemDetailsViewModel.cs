@@ -134,10 +134,13 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
 
         MediaInfo = new ObservableCollection<MediaInfoItem>(mediaInfo);
 
-        SourceContainers = new ObservableCollection<MediaSourceInfo>(Item.MediaSources);
+        if (Item.MediaSources is not null && Item.MediaSources.Count > 0)
+        {
+            SourceContainers = new ObservableCollection<MediaSourceInfo>(Item.MediaSources);
 
-        // This will trigger OnSelectedSourceContainerChanged, which populates the video, audio, and subtitle drop-downs.
-        SelectedSourceContainer = SourceContainers[0];
+            // This will trigger OnSelectedSourceContainerChanged, which populates the video, audio, and subtitle drop-downs.
+            SelectedSourceContainer = SourceContainers[0];
+        }
 
         TagLine = Item.Taglines.Count > 0 ? Item.Taglines[0] : null;
         Overview = Item.Overview;
@@ -250,11 +253,15 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
 
     public void Play()
     {
-        _navigationManager.NavigateToVideo(
-            Item,
-            SelectedSourceContainer.Id,
-            SelectedAudioStream?.Index,
-            SelectedSubtitleStream?.Index);
+        // TODO: Support playlists
+        if (SelectedSourceContainer is not null)
+        {
+            _navigationManager.NavigateToVideo(
+                Item,
+                SelectedSourceContainer.Id,
+                SelectedAudioStream?.Index,
+                SelectedSubtitleStream?.Index);
+        }
     }
 
     public async void PlayTrailer()
