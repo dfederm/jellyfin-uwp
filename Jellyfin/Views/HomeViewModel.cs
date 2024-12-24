@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Sdk;
@@ -19,16 +20,31 @@ internal sealed partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<BaseItemDto> _continueWatchingItems;
 
+    [ObservableProperty]
+    private ObservableCollection<BaseItemDto> _continueListeningItems;
+
+    [ObservableProperty]
+    private ObservableCollection<BaseItemDto> _continueReadingItems;
+
+    [ObservableProperty]
+    private ObservableCollection<BaseItemDto> _nextUpItems;
+
     public HomeViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {
         _jellyfinApiClient = jellyfinApiClient;
         _navigationManager = navigationManager;
 
-        InitializeUserViews();
-        InitializeContinueWatchingItems();
+        // TODO: Make a control for sections for reusability
+        _ = InitializeUserViewsAsync();
+        _ = InitializeContinueWatchingItemsAsync();
+        _ = InitializeContinueListeningItemsAsync();
+        _ = InitializeContinueReadingItemsAsync();
+        // TODO: LiveTv Section
+        _ = InitializeNextUpItemsAsync();
+        // TODO: LatestMedia Sections
     }
 
-    private async void InitializeUserViews()
+    private async Task InitializeUserViewsAsync()
     {
         List<BaseItemDto> items = new();
 
@@ -46,11 +62,37 @@ internal sealed partial class HomeViewModel : ObservableObject
         UserViews = new ObservableCollection<BaseItemDto>(items);
     }
 
-    private async void InitializeContinueWatchingItems()
+    private async Task InitializeContinueWatchingItemsAsync()
+    {
+        List<BaseItemDto> items = await GetItemsToResumeAsync(MediaType.Video);
+        ContinueWatchingItems = new ObservableCollection<BaseItemDto>(items);
+    }
+
+    private async Task InitializeContinueListeningItemsAsync()
+    {
+        List<BaseItemDto> items = await GetItemsToResumeAsync(MediaType.Audio);
+        ContinueListeningItems = new ObservableCollection<BaseItemDto>(items);
+    }
+
+    private async Task InitializeContinueReadingItemsAsync()
+    {
+        List<BaseItemDto> items = await GetItemsToResumeAsync(MediaType.Book);
+        ContinueReadingItems = new ObservableCollection<BaseItemDto>(items);
+    }
+
+    private async Task<List<BaseItemDto>> GetItemsToResumeAsync(MediaType mediaType)
     {
         List<BaseItemDto> items = new();
 
-        BaseItemDtoQueryResult result = await _jellyfinApiClient.UserItems.Resume.GetAsync();
+        BaseItemDtoQueryResult result = await _jellyfinApiClient.UserItems.Resume.GetAsync(requestConfig =>
+        {
+            requestConfig.QueryParameters.Limit = 12;
+            requestConfig.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
+            requestConfig.QueryParameters.ImageTypeLimit = 1;
+            requestConfig.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
+            requestConfig.QueryParameters.EnableTotalRecordCount = false;
+            requestConfig.QueryParameters.MediaTypes = [mediaType];
+        });
         foreach (BaseItemDto item in result.Items)
         {
             if (!item.Id.HasValue)
@@ -61,7 +103,25 @@ internal sealed partial class HomeViewModel : ObservableObject
             items.Add(item);
         }
 
-        ContinueWatchingItems = new ObservableCollection<BaseItemDto>(items);
+        return items;
+    }
+
+    private async Task InitializeNextUpItemsAsync()
+    {
+        List<BaseItemDto> items = new();
+
+        BaseItemDtoQueryResult result = await _jellyfinApiClient.Shows.NextUp.GetAsync();
+        foreach (BaseItemDto item in result.Items)
+        {
+            if (!item.Id.HasValue)
+            {
+                continue;
+            }
+
+            items.Add(item);
+        }
+
+        NextUpItems = new ObservableCollection<BaseItemDto>(items);
     }
 
     [RelayCommand]

@@ -59,7 +59,6 @@
                 </ListView>
 
                 <!-- TODO: Don't render if there are no items -->
-                <!-- TODO: Create Card user control for reuseability and customizability -->
                 <TextBlock
                     Text="Continue Watching" 
                     Foreground="White"
@@ -68,6 +67,90 @@
                     HorizontalAlignment="Left" />
                 <ListView
                     ItemsSource="{x:Bind ViewModel.ContinueWatchingItems, Mode=OneWay}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    Margin="8 0 20 10"
+                    Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BaseItemDto">
+                            <uc:Card
+                                Item="{x:Bind}"
+                                Shape="Backdrop"
+                                PreferredImageType="Thumb" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- TODO: Don't render if there are no items -->
+                <TextBlock
+                    Text="Continue Listening" 
+                    Foreground="White"
+                    FontSize="{StaticResource FontL}"
+                    Margin="20 10 0 5"
+                    HorizontalAlignment="Left" />
+                <ListView
+                    ItemsSource="{x:Bind ViewModel.ContinueListeningItems, Mode=OneWay}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    Margin="8 0 20 10"
+                    Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BaseItemDto">
+                            <uc:Card
+                                Item="{x:Bind}"
+                                Shape="Backdrop"
+                                PreferredImageType="Thumb" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- TODO: Don't render if there are no items -->
+                <TextBlock
+                    Text="Continue Reading" 
+                    Foreground="White"
+                    FontSize="{StaticResource FontL}"
+                    Margin="20 10 0 5"
+                    HorizontalAlignment="Left" />
+                <ListView
+                    ItemsSource="{x:Bind ViewModel.ContinueReadingItems, Mode=OneWay}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    Margin="8 0 20 10"
+                    Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BaseItemDto">
+                            <uc:Card
+                                Item="{x:Bind}"
+                                Shape="Backdrop"
+                                PreferredImageType="Thumb" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- TODO: Don't render if there are no items -->
+                <TextBlock
+                    Text="Next Up" 
+                    Foreground="White"
+                    FontSize="{StaticResource FontL}"
+                    Margin="20 10 0 5"
+                    HorizontalAlignment="Left" />
+                <ListView
+                    ItemsSource="{x:Bind ViewModel.NextUpItems, Mode=OneWay}"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
                     Margin="8 0 20 10"
