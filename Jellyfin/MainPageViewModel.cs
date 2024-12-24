@@ -105,26 +105,12 @@ internal sealed partial class MainPageViewModel : ObservableObject
 
             Guid itemId = item.Id.Value;
 
-            // TODO: Create a better abstraction for this!
-            if (item.CollectionType.HasValue && item.CollectionType.Value == BaseItemDto_CollectionType.Movies)
+            navigationItems.Add(new NavigationViewItem
             {
-                navigationItems.Add(new NavigationViewItem
-                {
-                    Content = item.Name,
-                    Icon = new SymbolIcon(Symbol.Library),
-                    Tag = new NavigationViewItemContext(() => _navigationManager.NavigateToItem(item), itemId),
-                });
-            }
-            else
-            {
-                // TODO: Need to handle other library types. Display disabled for now.
-                navigationItems.Add(new NavigationViewItem
-                {
-                    Content = item.Name,
-                    Icon = new SymbolIcon(Symbol.Library),
-                    IsEnabled = false,
-                });
-            }
+                Content = item.Name,
+                Icon = new SymbolIcon(Symbol.Library), // TODO: Use different icons for different collection types
+                Tag = new NavigationViewItemContext(() => _navigationManager.NavigateToItem(item), itemId),
+            });
         }
 
         navigationItems.Add(new NavigationViewItemHeader { Content = "User" });
