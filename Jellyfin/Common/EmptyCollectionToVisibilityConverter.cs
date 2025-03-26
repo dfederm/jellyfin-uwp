@@ -9,9 +9,9 @@ internal sealed class EmptyCollectionToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        return value is not ICollection enumerable
+        return value is not ICollection collection
             ? throw new InvalidOperationException($"{nameof(EmptyCollectionToVisibilityConverter)} can only be used with collection types")
-            : enumerable.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+            : collection.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
