@@ -6,5 +6,5 @@ namespace Jellyfin.Models;
 public class HomeViewSection
 {
     public string Name { get; set; }
-    public IEnumerable<BaseItemDto> Items { get; set; }
+    public IReadOnlyList<BaseItemDto> Items { get; set; }
 }

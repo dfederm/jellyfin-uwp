@@ -33,7 +33,6 @@ internal sealed partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private List<HomeViewSection> _sections;
 
-
     public HomeViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {
         _jellyfinApiClient = jellyfinApiClient;
