@@ -143,6 +143,7 @@
     <Compile Include="Behaviors\FocusOnLoadBehavior.cs" />
     <Compile Include="Behaviors\ListViewBaseCommandBehavior.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\EmptyCollectionToVisibilityConverter.cs" />
     <Compile Include="Common\VisibleIfNotNullConverter.cs" />
     <Compile Include="Controls\Card.xaml.cs">
       <DependentUpon>Card.xaml</DependentUpon>
@@ -159,6 +160,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPageViewModel.cs" />
+    <Compile Include="Models\HomeViewSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DeviceProfileManager.cs" />
     <Compile Include="Services\NavigationManager.cs" />

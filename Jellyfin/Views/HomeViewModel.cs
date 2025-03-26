@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Jellyfin.Models;
 using Jellyfin.Sdk;
 using Jellyfin.Sdk.Generated.Models;
 using Jellyfin.Services;
@@ -29,19 +30,37 @@ internal sealed partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<BaseItemDto> _nextUpItems;
 
+    [ObservableProperty]
+    private List<HomeViewSection> _sections;
+
     public HomeViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {
         _jellyfinApiClient = jellyfinApiClient;
         _navigationManager = navigationManager;
+    }
 
-        // TODO: Make a control for sections for reusability
-        _ = InitializeUserViewsAsync();
-        _ = InitializeContinueWatchingItemsAsync();
-        _ = InitializeContinueListeningItemsAsync();
-        _ = InitializeContinueReadingItemsAsync();
-        // TODO: LiveTv Section
-        _ = InitializeNextUpItemsAsync();
-        // TODO: LatestMedia Sections
+    public async Task InitializeAsync()
+    {
+        Task[] tasks =
+        [
+            InitializeUserViewsAsync(),
+            InitializeContinueWatchingItemsAsync(),
+            InitializeContinueListeningItemsAsync(),
+            InitializeContinueReadingItemsAsync(),
+            // TODO: LiveTV Section,
+            InitializeNextUpItemsAsync(),
+            // TODO: LatestMedia Sections
+        ];
+
+        await Task.WhenAll(tasks);
+
+        Sections =
+        [
+            new () { Items = ContinueWatchingItems, Name = "Continue Watching" },
+            new () { Items = ContinueListeningItems, Name = "Continue Listening" },
+            new () { Items = ContinueReadingItems, Name = "Continue Reading" },
+            new () { Items = NextUpItems, Name = "Next Up" }
+        ];
     }
 
     private async Task InitializeUserViewsAsync()
