@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Jellyfin.Views;
 
-public sealed partial class WebVideo : Page
+internal sealed partial class WebVideo : Page
 {
     public WebVideo()
     {
@@ -23,5 +23,5 @@ public sealed partial class WebVideo : Page
         WebView2.Close();
     }
 
-    public record Parameters(Uri VideoUri);
+    internal sealed record Parameters(Uri VideoUri);
 }

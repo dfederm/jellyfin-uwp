@@ -111,5 +111,5 @@ internal sealed partial class MainPage : Page
         }
     }
 
-    internal record Parameters(Action DeferredNavigationAction);
+    internal sealed record Parameters(Action DeferredNavigationAction);
 }

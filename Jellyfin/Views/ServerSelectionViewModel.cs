@@ -28,7 +28,7 @@ internal sealed partial class ServerSelectionViewModel : ObservableValidator
     [NotifyCanExecuteChangedFor(nameof(ConnectCommand))]
     [Required(AllowEmptyStrings = false)]
     [NotifyDataErrorInfo]
-    private string _serverUrl;
+    public partial string ServerUrl { get; set; }
 
     public ServerSelectionViewModel(
         AppSettings appSettings,

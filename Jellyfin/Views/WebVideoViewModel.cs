@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Jellyfin.Views;
 
-public sealed partial class WebVideoViewModel : ObservableObject
+internal sealed partial class WebVideoViewModel : ObservableObject
 {
     [ObservableProperty]
     public partial Uri VideoUri { get; set; }

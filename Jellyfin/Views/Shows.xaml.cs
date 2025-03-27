@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Jellyfin.Views;
 
-public sealed partial class Shows : Page
+internal sealed partial class Shows : Page
 {
     public Shows()
     {
@@ -18,5 +18,5 @@ public sealed partial class Shows : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e) => ViewModel.HandleParameters(e.Parameter as Parameters);
 
-    public record Parameters(Guid CollectionItemId);
+    internal sealed record Parameters(Guid CollectionItemId);
 }

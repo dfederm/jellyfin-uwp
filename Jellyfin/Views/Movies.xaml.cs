@@ -18,5 +18,5 @@ internal sealed partial class Movies : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e) => ViewModel.HandleParameters(e.Parameter as Parameters);
 
-    internal record Parameters(Guid CollectionItemId);
+    internal sealed record Parameters(Guid CollectionItemId);
 }

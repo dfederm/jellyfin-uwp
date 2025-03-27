@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Jellyfin.Views;
 
-public sealed partial class Video : Page
+internal sealed partial class Video : Page
 {
     public Video()
     {
@@ -20,5 +20,5 @@ public sealed partial class Video : Page
 
     protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e) => await ViewModel.StopVideoAsync();
 
-    public record Parameters(BaseItemDto Item, string MediaSourceId, int? AudioStreamIndex, int? SubtitleStreamIndex);
+    internal sealed record Parameters(BaseItemDto Item, string MediaSourceId, int? AudioStreamIndex, int? SubtitleStreamIndex);
 }

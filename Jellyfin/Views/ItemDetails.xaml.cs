@@ -18,5 +18,5 @@ internal sealed partial class ItemDetails : Page
 
     protected override void OnNavigatedTo(NavigationEventArgs e) => ViewModel.HandleParameters(e.Parameter as Parameters);
 
-    internal record Parameters(Guid ItemId);
+    internal sealed record Parameters(Guid ItemId);
 }
