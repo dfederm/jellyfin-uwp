@@ -16,7 +16,7 @@ internal sealed partial class ShowsViewModel : ObservableObject
     private Guid? _collectionItemId;
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _shows;
+    public partial ObservableCollection<BaseItemDto> Shows { get; set; }
 
     public ShowsViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {

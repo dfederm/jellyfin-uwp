@@ -16,7 +16,7 @@ internal sealed partial class MoviesViewModel : ObservableObject
     private Guid? _collectionItemId;
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _movies;
+    public partial ObservableCollection<BaseItemDto> Movies { get; set; }
 
     public MoviesViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {

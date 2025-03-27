@@ -16,22 +16,22 @@ internal sealed partial class HomeViewModel : ObservableObject
     private readonly NavigationManager _navigationManager;
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _userViews;
+    public partial ObservableCollection<BaseItemDto> UserViews { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _continueWatchingItems;
+    public partial ObservableCollection<BaseItemDto> ContinueWatchingItems { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _continueListeningItems;
+    public partial ObservableCollection<BaseItemDto> ContinueListeningItems { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _continueReadingItems;
+    public partial ObservableCollection<BaseItemDto> ContinueReadingItems { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<BaseItemDto> _nextUpItems;
+    public partial ObservableCollection<BaseItemDto> NextUpItems { get; set; }
 
     [ObservableProperty]
-    private List<HomeViewSection> _sections;
+    public partial List<HomeViewSection> Sections { get; set; }
 
     public HomeViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {

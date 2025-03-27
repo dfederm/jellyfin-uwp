@@ -29,61 +29,61 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
     private readonly NavigationManager _navigationManager;
 
     [ObservableProperty]
-    private BaseItemDto _item;
+    public partial BaseItemDto Item { get; set; }
 
     [ObservableProperty]
-    private string _name;
+    public partial string Name { get; set; }
 
     [ObservableProperty]
-    private Uri _backdropImageUri;
+    public partial Uri BackdropImageUri { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<MediaInfoItem> _mediaInfo;
+    public partial ObservableCollection<MediaInfoItem> MediaInfo { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<MediaSourceInfo> _sourceContainers;
+    public partial ObservableCollection<MediaSourceInfo> SourceContainers { get; set; }
 
     [ObservableProperty]
-    private MediaSourceInfo _selectedSourceContainer;
+    public partial MediaSourceInfo SelectedSourceContainer { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<MediaStreamOption> _videoStreams;
+    public partial ObservableCollection<MediaStreamOption> VideoStreams { get; set; }
 
     [ObservableProperty]
-    private MediaStreamOption _selectedVideoStream;
+    public partial MediaStreamOption SelectedVideoStream { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<MediaStreamOption> _audioStreams;
+    public partial ObservableCollection<MediaStreamOption> AudioStreams { get; set; }
 
     [ObservableProperty]
-    private MediaStreamOption _selectedAudioStream;
+    public partial MediaStreamOption SelectedAudioStream { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<MediaStreamOption> _subtitleStreams;
+    public partial ObservableCollection<MediaStreamOption> SubtitleStreams { get; set; }
 
     [ObservableProperty]
-    private MediaStreamOption _selectedSubtitleStream;
+    public partial MediaStreamOption SelectedSubtitleStream { get; set; }
 
     [ObservableProperty]
-    private string _tagLine;
+    public partial string TagLine { get; set; }
 
     [ObservableProperty]
-    private string _overview;
+    public partial string Overview { get; set; }
 
     [ObservableProperty]
-    private string _tags;
+    public partial string Tags { get; set; }
 
     [ObservableProperty]
-    private bool _isPlayed;
+    public partial bool IsPlayed { get; set; }
 
     [ObservableProperty]
-    private Brush _playStateBrush;
+    public partial Brush PlayStateBrush { get; set; }
 
     [ObservableProperty]
-    private bool _isFavorite;
+    public partial bool IsFavorite { get; set; }
 
     [ObservableProperty]
-    private Brush _favoriteBrush;
+    public partial Brush FavoriteBrush { get; set; }
 
     public ItemDetailsViewModel(JellyfinApiClient jellyfinApiClient, NavigationManager navigationManager)
     {

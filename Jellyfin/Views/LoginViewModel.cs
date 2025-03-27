@@ -18,25 +18,25 @@ internal sealed partial class LoginViewModel : ObservableValidator
     private readonly NavigationManager _navigationManager;
 
     [ObservableProperty]
-    private bool _isInteractable;
+    public partial bool IsInteractable { get; set; }
 
     [ObservableProperty]
-    private string _errorMessage;
+    public partial string ErrorMessage { get; set; }
 
     [ObservableProperty]
-    private bool _showErrorMessage;
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SignInCommand))]
-    [Required(AllowEmptyStrings = false)]
-    [NotifyDataErrorInfo]
-    private string _userName;
+    public partial bool ShowErrorMessage { get; set; }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SignInCommand))]
     [Required(AllowEmptyStrings = false)]
     [NotifyDataErrorInfo]
-    private string _password;
+    public partial string UserName { get; set; }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SignInCommand))]
+    [Required(AllowEmptyStrings = false)]
+    [NotifyDataErrorInfo]
+    public partial string Password { get; set; }
 
     public LoginViewModel(
         AppSettings appSettings,

@@ -7,25 +7,25 @@ namespace Jellyfin.Controls;
 internal sealed partial class CardViewModel : ObservableObject
 {
     [ObservableProperty]
-    private BaseItemDto _item;
+    public partial BaseItemDto Item { get; set; }
 
     [ObservableProperty]
-    private CardShape _shape;
+    public partial CardShape Shape { get; set; }
 
     [ObservableProperty]
-    private ImageType? _preferredImageType;
+    public partial ImageType? PreferredImageType { get; set; }
 
     [ObservableProperty]
-    private string _name;
+    public partial string Name { get; set; }
 
     [ObservableProperty]
-    private ImageType _imageType;
+    public partial ImageType ImageType { get; set; }
 
     [ObservableProperty]
-    private int _imageWidth;
+    public partial int ImageWidth { get; set; }
 
     [ObservableProperty]
-    private int _imageHeight;
+    public partial int ImageHeight { get; set; }
 
     partial void OnItemChanged(BaseItemDto value) => InvalidateState();
 

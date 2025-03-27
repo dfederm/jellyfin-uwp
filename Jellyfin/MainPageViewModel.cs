@@ -16,10 +16,10 @@ internal sealed partial class MainPageViewModel : ObservableObject
     private readonly NavigationManager _navigationManager;
 
     [ObservableProperty]
-    private bool _isMenuOpen;
+    public partial bool IsMenuOpen { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<NavigationViewItemBase> _navigationItems;
+    public partial ObservableCollection<NavigationViewItemBase> NavigationItems { get; set; }
 
     public MainPageViewModel(
         AppSettings appSettings,

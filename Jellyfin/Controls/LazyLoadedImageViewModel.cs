@@ -16,25 +16,25 @@ internal sealed partial class LazyLoadedImageViewModel : ObservableObject
     private readonly JellyfinApiClient _jellyfinApiClient;
 
     [ObservableProperty]
-    private BaseItemDto _item;
+    public partial BaseItemDto Item { get; set; }
 
     [ObservableProperty]
-    private ImageType? _imageType;
+    public partial ImageType? ImageType { get; set; }
 
     [ObservableProperty]
-    private int _width;
+    public partial int Width { get; set; }
 
     [ObservableProperty]
-    private int _height;
+    public partial int Height { get; set; }
 
     [ObservableProperty]
-    private bool _enableBlurHash = true;
+    public partial bool EnableBlurHash { get; set; } = true;
 
     [ObservableProperty]
-    private Uri _imageUri;
+    public partial Uri ImageUri { get; set; }
 
     [ObservableProperty]
-    private ImageSource _blurHashImageSource;
+    public partial ImageSource BlurHashImageSource { get; set; }
 
     public LazyLoadedImageViewModel(JellyfinApiClient jellyfinApiClient)
     {
