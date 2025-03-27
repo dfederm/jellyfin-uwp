@@ -7,6 +7,8 @@ namespace Jellyfin;
 
 internal static class JellyfinApiClientExtensions
 {
+    private static readonly Random Random = new();
+
     public static Uri GetImageUri(
         this JellyfinApiClient jellyfinApiClient,
         BaseItemDto item,
@@ -54,7 +56,7 @@ internal static class JellyfinApiClientExtensions
 
         if (item.Id.HasValue && item.BackdropImageTags?.Count > 0)
         {
-            int backdropImgIndex = new Random().Next(0, item.BackdropImageTags.Count - 1);
+            int backdropImgIndex = Random.Next(0, item.BackdropImageTags.Count - 1);
             backdropImageRequest = jellyfinApiClient.Items[item.Id.Value].Images[nameof(ImageType.Backdrop)][backdropImgIndex].ToGetRequestInformation(
                 parameters =>
                 {
@@ -64,7 +66,7 @@ internal static class JellyfinApiClientExtensions
         }
         else if (item.ParentBackdropItemId.HasValue && item.ParentBackdropImageTags?.Count > 0)
         {
-            int backdropImgIndex = new Random().Next(0, item.ParentBackdropImageTags.Count - 1);
+            int backdropImgIndex = Random.Next(0, item.ParentBackdropImageTags.Count - 1);
             backdropImageRequest = jellyfinApiClient.Items[item.ParentBackdropItemId.Value].Images[nameof(ImageType.Backdrop)][backdropImgIndex].ToGetRequestInformation(
                 parameters =>
                 {
