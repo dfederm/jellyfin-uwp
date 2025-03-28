@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +7,9 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-internal sealed partial class ServerSelectionViewModel : ObservableValidator
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
+internal sealed partial class ServerSelectionViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinSdkSettings _sdkClientSettings;
@@ -25,9 +26,6 @@ internal sealed partial class ServerSelectionViewModel : ObservableValidator
     public partial bool ShowErrorMessage { get; set; }
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(ConnectCommand))]
-    [Required(AllowEmptyStrings = false)]
-    [NotifyDataErrorInfo]
     public partial string ServerUrl { get; set; }
 
     public ServerSelectionViewModel(
@@ -49,6 +47,8 @@ internal sealed partial class ServerSelectionViewModel : ObservableValidator
         IsInteractable = true;
     }
 
+    partial void OnServerUrlChanged(string value) => ConnectCommand.NotifyCanExecuteChanged();
+
     private bool CanConnect() => !string.IsNullOrWhiteSpace(ServerUrl);
 
     [RelayCommand(CanExecute = nameof(CanConnect))]
@@ -58,8 +58,7 @@ internal sealed partial class ServerSelectionViewModel : ObservableValidator
         ShowErrorMessage = false;
         try
         {
-            ValidateAllProperties();
-            if (HasErrors)
+            if (!CanConnect())
             {
                 UpdateErrorMessage("A Server URL is required");
                 return;
@@ -91,7 +90,9 @@ internal sealed partial class ServerSelectionViewModel : ObservableValidator
             catch (Exception ex)
             {
                 UpdateErrorMessage("We're unable to connect to the selected server right now. Please ensure it is running and try again.");
+#pragma warning disable CA1849 // Call async methods when in an async method
                 Console.Error.WriteLine($"Error connecting to {serverUrl}: {ex.Message}");
+#pragma warning restore CA1849 // Call async methods when in an async method
                 return;
             }
 

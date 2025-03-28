@@ -10,7 +10,9 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class HomeViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly NavigationManager _navigationManager;
@@ -56,10 +58,30 @@ internal sealed partial class HomeViewModel : ObservableObject
 
         Sections =
         [
-            new () { Items = ContinueWatchingItems, Name = "Continue Watching" },
-            new () { Items = ContinueListeningItems, Name = "Continue Listening" },
-            new () { Items = ContinueReadingItems, Name = "Continue Reading" },
-            new () { Items = NextUpItems, Name = "Next Up" }
+            new ()
+            {
+                Name = "Continue Watching",
+                Items = ContinueWatchingItems,
+                NavigateToItemCommand = NavigateToItemCommand,
+            },
+            new ()
+            {
+                Name = "Continue Listening",
+                Items = ContinueListeningItems,
+                NavigateToItemCommand = NavigateToItemCommand,
+            },
+            new ()
+            {
+                Name = "Continue Reading",
+                Items = ContinueReadingItems,
+                NavigateToItemCommand = NavigateToItemCommand,
+            },
+            new ()
+            {
+                Name = "Next Up",
+                Items = NextUpItems,
+                NavigateToItemCommand = NavigateToItemCommand,
+            }
         ];
     }
 

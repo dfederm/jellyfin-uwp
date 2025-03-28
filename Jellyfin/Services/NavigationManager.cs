@@ -9,7 +9,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Services;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed class NavigationManager
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     // Fake item id used to identify the home page
     public static readonly Guid HomeId = new Guid("CDF95D47-90C2-4057-B12C-BA81C34F2CB9");
@@ -30,10 +32,7 @@ internal sealed class NavigationManager
 
     public void Initialize(Frame appFrame)
     {
-        if (appFrame is null)
-        {
-            throw new ArgumentNullException(nameof(appFrame));
-        }
+        ArgumentNullException.ThrowIfNull(appFrame);
 
         if (_appFrame is not null)
         {
@@ -49,10 +48,7 @@ internal sealed class NavigationManager
 
     public void RegisterContentFrame(Frame contentFrame)
     {
-        if (contentFrame is null)
-        {
-            throw new ArgumentNullException(nameof(contentFrame));
-        }
+        ArgumentNullException.ThrowIfNull(contentFrame);
 
         if (_contentFrame is not null)
         {

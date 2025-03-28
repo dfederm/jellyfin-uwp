@@ -2,7 +2,9 @@
 
 namespace Jellyfin;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed class AppSettings
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     public string ServerUrl
     {

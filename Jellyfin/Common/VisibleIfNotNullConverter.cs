@@ -9,7 +9,7 @@ namespace Jellyfin.Common;
 /// Value converter that translates a non-null value or non-empty collection to <see cref="Visibility.Visible"/>
 /// and a null value or empty collection to <see cref="Visibility.Collapsed"/>.
 /// </summary>
-internal sealed class VisibleIfNotNullConverter : IValueConverter
+internal sealed partial class VisibleIfNotNullConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
         => value is not null && (value is not ICollection collection || collection.Count != 0)

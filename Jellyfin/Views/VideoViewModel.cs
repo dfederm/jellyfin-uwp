@@ -20,7 +20,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Views;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class VideoViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly JellyfinSdkSettings _sdkClientSettings;
@@ -133,6 +135,7 @@ internal sealed partial class VideoViewModel : ObservableObject
             return;
         }
 
+#pragma warning disable CA2000 // Dispose objects before losing scope. The media source is disposed in StopVideoAsync.
         MediaSource mediaSource;
         if (isAdaptive)
         {
@@ -154,6 +157,7 @@ internal sealed partial class VideoViewModel : ObservableObject
         {
             mediaSource = MediaSource.CreateFromUri(mediaUri);
         }
+#pragma warning restore CA2000 // Dispose objects before losing scope
 
         if (mediaSourceInfo.DefaultSubtitleStreamIndex.HasValue)
         {
@@ -187,7 +191,9 @@ internal sealed partial class VideoViewModel : ObservableObject
             playbackItem.TimedMetadataTracks.SetPresentationMode(0, TimedMetadataTrackPresentationMode.PlatformPresented);
         };
 
+#pragma warning disable CA2000 // Dispose objects before losing scope. Disposed in StopVideoAsync.
         _playerElement.SetMediaPlayer(new MediaPlayer());
+#pragma warning restore CA2000 // Dispose objects before losing scope
         _playerElement.MediaPlayer.Source = playbackItem;
 
         _playerElement.MediaPlayer.MediaEnded += async (mp, o) =>
@@ -312,7 +318,7 @@ internal sealed partial class VideoViewModel : ObservableObject
         const double SafetyRatio = 0.8; // Only allow 80% of the detected bitrate to avoid buffering.
 
         long startTime = Stopwatch.GetTimestamp();
-        CancellationTokenSource cts = new(TimeSpan.FromSeconds(5));
+        using CancellationTokenSource cts = new(TimeSpan.FromSeconds(5));
 
         int totalBytesRead = 0;
         try
@@ -326,7 +332,7 @@ internal sealed partial class VideoViewModel : ObservableObject
             byte[] buffer = new byte[DownloadChunkSize];
             while (true)
             {
-                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
+                int bytesRead = await stream.ReadAsync(buffer, cts.Token);
                 if (bytesRead == 0)
                 {
                     break;

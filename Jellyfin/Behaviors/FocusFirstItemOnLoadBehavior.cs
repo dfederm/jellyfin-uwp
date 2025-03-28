@@ -19,8 +19,6 @@ internal sealed class FocusFirstItemOnLoadBehavior : Behavior<ListViewBase>
     {
         base.OnAttached();
 
-        ////AssociatedObject.Loaded += Loaded;
-
         // The ItemSource of the listView will not be set yet, 
         // so get a method that we can hook up to later
         AssociatedObject.DataContextChanged += DataContextChanged;

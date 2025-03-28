@@ -18,7 +18,9 @@ namespace Jellyfin;
 /// <summary>
 /// Provides application-specific behavior to supplement the default Application class.
 /// </summary>
+#pragma warning disable CA1515 // Consider making public types internal
 sealed partial class App : Application
+#pragma warning restore CA1515 // Consider making public types internal
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinSdkSettings _sdkClientSettings;
@@ -52,6 +54,8 @@ sealed partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        ArgumentNullException.ThrowIfNull(args);
+
         Frame rootFrame = Window.Current.Content as Frame;
 
         // Do not repeat app initialization when the Window already has content,
@@ -130,7 +134,7 @@ sealed partial class App : Application
     /// <param name="e">Details about the navigation failure</param>
     private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
     {
-        throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        throw e.Exception;
     }
 
     /// <summary>

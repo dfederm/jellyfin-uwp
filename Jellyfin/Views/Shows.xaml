@@ -28,10 +28,10 @@
             <GridView
                 ItemsSource="{x:Bind ViewModel.Shows, Mode=OneWay}"
                 SelectionMode="None"
-                IsItemClickEnabled="True"
-                Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                IsItemClickEnabled="True">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:FocusFirstItemOnLoadBehavior />
+                    <Behaviors:ListViewBaseCommandBehavior Command="{x:Bind ViewModel.NavigateToItemCommand}" />
                 </Interactivity:Interaction.Behaviors>
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
