@@ -8,7 +8,9 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class MoviesViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
     private readonly NavigationManager _navigationManager;

@@ -154,44 +154,64 @@
                                 Grid.Column="0" />
                             <ComboBox
                                 ItemsSource="{x:Bind ViewModel.SourceContainers, Mode=OneWay}"
-                                DisplayMemberPath="Name"
                                 SelectedItem="{x:Bind ViewModel.SelectedSourceContainer, Mode=TwoWay}"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Width="550" />
+                                Width="550">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="local:MediaSourceInfoWrapper">
+                                        <TextBlock Text="{x:Bind Value.Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                             <TextBlock
                                 Text="Video"
                                 Grid.Row="1"
                                 Grid.Column="0" />
                             <ComboBox
                                 ItemsSource="{x:Bind ViewModel.VideoStreams, Mode=OneWay}"
-                                DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedVideoStream, Mode=TwoWay}"
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Width="550" />
+                                Width="550">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="local:MediaStreamOption">
+                                        <TextBlock Text="{x:Bind DisplayText }" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                             <TextBlock
                                 Text="Audio"
                                 Grid.Row="2"
                                 Grid.Column="0" />
                             <ComboBox
                                 ItemsSource="{x:Bind ViewModel.AudioStreams, Mode=OneWay}"
-                                DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedAudioStream, Mode=TwoWay}"
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Width="550" />
+                                Width="550">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="local:MediaStreamOption">
+                                        <TextBlock Text="{x:Bind DisplayText }" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                             <TextBlock
                                 Text="Subtitles"
                                 Grid.Row="3"
                                 Grid.Column="0" />
                             <ComboBox
                                 ItemsSource="{x:Bind ViewModel.SubtitleStreams, Mode=OneWay}"
-                                DisplayMemberPath="DisplayText"
                                 SelectedItem="{x:Bind ViewModel.SelectedSubtitleStream, Mode=TwoWay}"
                                 Grid.Row="3"
                                 Grid.Column="1"
-                                Width="550" />
+                                Width="550">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="local:MediaStreamOption">
+                                        <TextBlock Text="{x:Bind DisplayText }" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </Grid>
                         <TextBlock
                             Text="{x:Bind ViewModel.TagLine, Mode=OneWay}"

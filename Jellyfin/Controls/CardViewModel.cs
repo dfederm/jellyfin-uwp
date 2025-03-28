@@ -4,7 +4,9 @@ using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Controls;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class CardViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     [ObservableProperty]
     public partial BaseItemDto Item { get; set; }

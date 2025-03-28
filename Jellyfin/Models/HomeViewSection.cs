@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Windows.Input;
 using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Models;
 
-public class HomeViewSection
+internal sealed class HomeViewSection
 {
-    public string Name { get; set; }
-    public IReadOnlyList<BaseItemDto> Items { get; set; }
+    public required string Name { get; set; }
+
+    public required IReadOnlyList<BaseItemDto> Items { get; set; }
+
+    public required ICommand NavigateToItemCommand { get; set; }
 }

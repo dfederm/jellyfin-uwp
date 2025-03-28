@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Jellyfin.Common;
 
-internal sealed class EmptyCollectionToVisibilityConverter : IValueConverter
+internal sealed partial class EmptyCollectionToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {

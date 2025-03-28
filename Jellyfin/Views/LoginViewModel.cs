@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -10,7 +9,9 @@ using Jellyfin.Services;
 
 namespace Jellyfin.Views;
 
-internal sealed partial class LoginViewModel : ObservableValidator
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
+internal sealed partial class LoginViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly AppSettings _appSettings;
     private readonly JellyfinSdkSettings _sdkClientSettings;
@@ -27,15 +28,9 @@ internal sealed partial class LoginViewModel : ObservableValidator
     public partial bool ShowErrorMessage { get; set; }
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SignInCommand))]
-    [Required(AllowEmptyStrings = false)]
-    [NotifyDataErrorInfo]
     public partial string UserName { get; set; }
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SignInCommand))]
-    [Required(AllowEmptyStrings = false)]
-    [NotifyDataErrorInfo]
     public partial string Password { get; set; }
 
     public LoginViewModel(
@@ -52,6 +47,10 @@ internal sealed partial class LoginViewModel : ObservableValidator
         IsInteractable = true;
     }
 
+    partial void OnUserNameChanged(string value) => SignInCommand.NotifyCanExecuteChanged();
+
+    partial void OnPasswordChanged(string value) => SignInCommand.NotifyCanExecuteChanged();
+
     private bool CanSignIn() => !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password);
 
     [RelayCommand(CanExecute = nameof(CanSignIn))]
@@ -62,8 +61,7 @@ internal sealed partial class LoginViewModel : ObservableValidator
 
         try
         {
-            ValidateAllProperties();
-            if (HasErrors)
+            if (!CanSignIn())
             {
                 UpdateErrorMessage("Username and password are required");
                 return;

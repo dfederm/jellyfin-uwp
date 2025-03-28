@@ -11,8 +11,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    x:Name="Page">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -41,10 +40,10 @@
                     ItemsSource="{x:Bind ViewModel.UserViews, Mode=OneWay}"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
-                    Margin="8 0 20 10"
-                    Behaviors:ListViewBaseCommandBehavior.Command="{x:Bind ViewModel.NavigateToItemCommand}">
+                    Margin="8 0 20 10">
                   <Interactivity:Interaction.Behaviors>
                     <Behaviors:FocusFirstItemOnLoadBehavior />
+                    <Behaviors:ListViewBaseCommandBehavior Command="{x:Bind ViewModel.NavigateToItemCommand}" />
                   </Interactivity:Interaction.Behaviors>
                   <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -72,10 +71,12 @@
                                     Text="{x:Bind Name}" />
                                 <ListView
                                     Margin="8,0,20,10"
-                                    Behaviors:ListViewBaseCommandBehavior.Command="{Binding ElementName=Page, Path=ViewModel.NavigateToItemCommand}"
                                     IsItemClickEnabled="True"
                                     ItemsSource="{x:Bind Items}"
                                     SelectionMode="None">
+                                    <Interactivity:Interaction.Behaviors>
+                                      <Behaviors:ListViewBaseCommandBehavior Command="{x:Bind Path=NavigateToItemCommand}" />
+                                    </Interactivity:Interaction.Behaviors>
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal" />

@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Blurhash;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Sdk;
 using Jellyfin.Sdk.Generated.Models;
 using Microsoft.Kiota.Abstractions.Serialization;
-using Windows.Graphics.Imaging;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jellyfin.Controls;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class LazyLoadedImageViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private readonly JellyfinApiClient _jellyfinApiClient;
 
@@ -55,7 +57,7 @@ internal sealed partial class LazyLoadedImageViewModel : ObservableObject
         InvalidateImage();
     }
 
-    private async void InvalidateBlurHash()
+    private void InvalidateBlurHash()
     {
         if (Item is null
             || ImageType is null
@@ -99,12 +101,7 @@ internal sealed partial class LazyLoadedImageViewModel : ObservableObject
 
         if (blurHash is not null)
         {
-            SoftwareBitmap blurHashBitmap = CreateBlurHashImage(blurHash);
-
-            SoftwareBitmapSource blurHashSource = new();
-            await blurHashSource.SetBitmapAsync(blurHashBitmap);
-
-            BlurHashImageSource = blurHashSource;
+            BlurHashImageSource = CreateBlurHashImage(blurHash);
         }
     }
 
@@ -121,34 +118,33 @@ internal sealed partial class LazyLoadedImageViewModel : ObservableObject
         ImageUri = _jellyfinApiClient.GetImageUri(Item, ImageType.Value, Width, Height);
     }
 
-    private static unsafe SoftwareBitmap CreateBlurHashImage(string blurhash)
+    private static unsafe WriteableBitmap CreateBlurHashImage(string blurhash)
     {
         const int width = 20;
         const int height = 20;
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
         var pixelData = new Pixel[width, height];
+#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
         Core.Decode(blurhash, pixelData, 1);
 
-        SoftwareBitmap softwareBitmap = new(BitmapPixelFormat.Bgra8, width, height, BitmapAlphaMode.Premultiplied);
-
-        using (BitmapBuffer buffer = softwareBitmap.LockBuffer(BitmapBufferAccessMode.Write))
-        using (var reference = buffer.CreateReference())
+        WriteableBitmap bitmap = new(width, height);
+        using (var stream = bitmap.PixelBuffer.AsStream())
         {
-            ((IMemoryBufferByteAccess)reference).GetBuffer(out byte* dataInBytes, out uint capacity);
             for (int row = 0; row < height; row++)
             {
                 for (int col = 0; col < width; col++)
                 {
                     Pixel pixel = pixelData[row, col];
-                    *(dataInBytes++) = (byte)MathUtils.LinearTosRgb(pixel.Blue);
-                    *(dataInBytes++) = (byte)MathUtils.LinearTosRgb(pixel.Green);
-                    *(dataInBytes++) = (byte)MathUtils.LinearTosRgb(pixel.Red);
-                    *(dataInBytes++) = 255;
+                    stream.WriteByte((byte)MathUtils.LinearTosRgb(pixel.Blue));
+                    stream.WriteByte((byte)MathUtils.LinearTosRgb(pixel.Green));
+                    stream.WriteByte((byte)MathUtils.LinearTosRgb(pixel.Red));
+                    stream.WriteByte(255);
                 }
             }
         }
 
-        return softwareBitmap;
+        return bitmap;
     }
 
     [ComImport]

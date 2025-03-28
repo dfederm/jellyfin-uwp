@@ -46,7 +46,7 @@ internal sealed partial class MainPageViewModel : ObservableObject
         }
     }
 
-    public void NavigationItemSelected(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+    public void NavigationItemSelected(NavigationView _, NavigationViewItemInvokedEventArgs args)
     {
         if (args.InvokedItemContainer?.Tag is NavigationViewItemContext context)
         {
@@ -141,5 +141,5 @@ internal sealed partial class MainPageViewModel : ObservableObject
         NavigationItems = new ObservableCollection<NavigationViewItemBase>(navigationItems);
     }
 
-    internal record NavigationViewItemContext(Action NavigateAction, Guid? ItemId);
+    internal sealed record NavigationViewItemContext(Action NavigateAction, Guid? ItemId);
 }

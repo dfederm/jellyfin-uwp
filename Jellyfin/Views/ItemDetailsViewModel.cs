@@ -20,7 +20,11 @@ internal sealed record MediaStreamOption(string DisplayText, int? Index)
     public static MediaStreamOption SubtitlesOff { get; } = new("Off", -1);
 }
 
+internal sealed record MediaSourceInfoWrapper(string DisplayText, MediaSourceInfo Value);
+
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed partial class ItemDetailsViewModel : ObservableObject
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     private static readonly SolidColorBrush OnBrush = new SolidColorBrush(Colors.Red);
     private static readonly SolidColorBrush OffBrush = new SolidColorBrush(Colors.White);
@@ -41,10 +45,10 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
     public partial ObservableCollection<MediaInfoItem> MediaInfo { get; set; }
 
     [ObservableProperty]
-    public partial ObservableCollection<MediaSourceInfo> SourceContainers { get; set; }
+    public partial ObservableCollection<MediaSourceInfoWrapper> SourceContainers { get; set; }
 
     [ObservableProperty]
-    public partial MediaSourceInfo SelectedSourceContainer { get; set; }
+    public partial MediaSourceInfoWrapper SelectedSourceContainer { get; set; }
 
     [ObservableProperty]
     public partial ObservableCollection<MediaStreamOption> VideoStreams { get; set; }
@@ -136,7 +140,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
 
         if (Item.MediaSources is not null && Item.MediaSources.Count > 0)
         {
-            SourceContainers = new ObservableCollection<MediaSourceInfo>(Item.MediaSources);
+            SourceContainers = new ObservableCollection<MediaSourceInfoWrapper>(Item.MediaSources.Select(s => new MediaSourceInfoWrapper(s.Name, s)));
 
             // This will trigger OnSelectedSourceContainerChanged, which populates the video, audio, and subtitle drop-downs.
             SelectedSourceContainer = SourceContainers[0];
@@ -149,11 +153,11 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         UpdateUserData();
     }
 
-    partial void OnSelectedSourceContainerChanged(MediaSourceInfo value)
+    partial void OnSelectedSourceContainerChanged(MediaSourceInfoWrapper value)
     {
-        DetermineVideoOptions(value);
-        DetermineAudioOptions(value);
-        DetermineSubtitleOptions(value);
+        DetermineVideoOptions(value.Value);
+        DetermineAudioOptions(value.Value);
+        DetermineSubtitleOptions(value.Value);
     }
 
     private void DetermineVideoOptions(MediaSourceInfo mediaSourceInfo)
@@ -258,7 +262,7 @@ internal sealed partial class ItemDetailsViewModel : ObservableObject
         {
             _navigationManager.NavigateToVideo(
                 Item,
-                SelectedSourceContainer.Id,
+                SelectedSourceContainer.Value.Id,
                 SelectedAudioStream?.Index,
                 SelectedSubtitleStream?.Index);
         }

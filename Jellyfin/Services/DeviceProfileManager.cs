@@ -10,7 +10,9 @@ using Windows.Media.Render;
 
 namespace Jellyfin.Services;
 
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Used via dependency injection.
 internal sealed class DeviceProfileManager
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 {
     public DeviceProfile Profile { get; private set; }
 
@@ -1069,7 +1071,9 @@ internal sealed class DeviceProfileManager
         // Subtitle profiles
         // External vtt or burn in
         string subtitleBurninSetting = ""; // TODO: appSettings.get("subtitleburnin");
+#pragma warning disable CA1508 // Avoid dead conditional code
         if (subtitleBurninSetting != "all")
+#pragma warning restore CA1508 // Avoid dead conditional code
         {
             profile.SubtitleProfiles.Add(
                 new SubtitleProfile
@@ -1090,7 +1094,9 @@ internal sealed class DeviceProfileManager
             }
 
             bool enableSsaRender = false; // TODO: Check settings
+#pragma warning disable CA1508 // Avoid dead conditional code
             if (!enableSsaRender && subtitleBurninSetting != "allcomplexformats")
+#pragma warning restore CA1508 // Avoid dead conditional code
             {
                 profile.SubtitleProfiles.Add(
                     new SubtitleProfile

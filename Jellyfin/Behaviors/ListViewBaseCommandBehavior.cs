@@ -1,47 +1,47 @@
 using System.Windows.Input;
-using Windows.UI.Xaml.Controls;
+using Microsoft.Xaml.Interactivity;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Jellyfin.Behaviors;
 
 /// <summary>
 /// Creates an attached property for all ListViewBase controls allowing binding  a command object to it's ItemClick event.
 /// </summary>
-internal static class ListViewBaseCommandBehavior
+internal sealed class ListViewBaseCommandBehavior : Behavior<ListViewBase>
 {
-    public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+    public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
         "Command",
         typeof(ICommand),
         typeof(ListViewBaseCommandBehavior),
-        new PropertyMetadata(null, OnCommandPropertyChanged));
+        new PropertyMetadata(null));
 
-    public static void SetCommand(DependencyObject d, ICommand value) => d.SetValue(CommandProperty, value);
-
-    public static ICommand GetCommand(DependencyObject d) => (ICommand)d.GetValue(CommandProperty);
-
-    private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    public ICommand Command
     {
-        if (d is ListViewBase control)
-        {
-            // Remove the old click handler if there was a previous command
-            if (e.OldValue is not null)
-            {
-                control.ItemClick -= OnItemClick;
-            }
-
-            control.ItemClick += OnItemClick;
-        }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
-    private static void OnItemClick(object sender, ItemClickEventArgs e)
+    protected override void OnAttached()
     {
-        if (sender is ListViewBase control)
+        base.OnAttached();
+
+        AssociatedObject.ItemClick += ItemClicked;
+    }
+
+    protected override void OnDetaching()
+    {
+        base.OnDetaching();
+
+        AssociatedObject.ItemClick -= ItemClicked;
+    }
+
+    private void ItemClicked(object sender, ItemClickEventArgs e)
+    {
+        ICommand command = Command;
+        if (command is not null && command.CanExecute(e.ClickedItem))
         {
-            ICommand command = GetCommand(control);
-            if (command is not null && command.CanExecute(e.ClickedItem))
-            {
-                command.Execute(e.ClickedItem);
-            }
+            command.Execute(e.ClickedItem);
         }
     }
 }
